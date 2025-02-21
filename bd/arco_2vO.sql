@@ -17,6 +17,7 @@ SET time_zone = "+00:00";
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8mb4 */;
 
+USE arco;
 --
 -- Base de datos: `arco`
 --
@@ -27,7 +28,7 @@ SET time_zone = "+00:00";
 -- Estructura de tabla para la tabla `categorias`
 --
 
-CREATE TABLE `categorias` (
+CREATE TABLE IF NOT EXISTS `categorias` (
   `id_categorias` int(3) NOT NULL,
   `nombre_cat` varchar(25) DEFAULT NULL,
   `subcategoria` int(4) DEFAULT NULL
@@ -39,7 +40,7 @@ CREATE TABLE `categorias` (
 -- Estructura de tabla para la tabla `clientes`
 --
 
-CREATE TABLE `clientes` (
+CREATE TABLE IF NOT EXISTS `clientes` (
   `id_cliente` int(6) NOT NULL,
   `numd_doc` int(11) DEFAULT NULL,
   `nombre_cliente` varchar(20) DEFAULT NULL,
@@ -52,8 +53,8 @@ CREATE TABLE `clientes` (
 -- Estructura de tabla para la tabla `comprobante`
 --
 
-CREATE TABLE `comprobante` (
-  `id_comprobante` int(5) NOT NULL auto_increment,
+CREATE TABLE IF NOT EXISTS `comprobante` (
+  `id_comprobante` int(5) NOT NULL,
   `num_comprobante` varchar(10) DEFAULT NULL,
   `fecha_entrada` datetime DEFAULT NULL,
   `fecha_salida` datetime DEFAULT NULL,
@@ -68,7 +69,7 @@ CREATE TABLE `comprobante` (
 -- Estructura de tabla para la tabla `contrasena`
 --
 
-CREATE TABLE `contrasena` (
+CREATE TABLE IF NOT EXISTS `contrasena` (
   `id_contrasena` int(12) NOT NULL,
   `fk_usuario` int(12) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -79,7 +80,7 @@ CREATE TABLE `contrasena` (
 -- Estructura de tabla para la tabla `detalles`
 --
 
-CREATE TABLE `detalles` (
+CREATE TABLE IF NOT EXISTS `detalles` (
   `id_detalles` int(4) DEFAULT NULL,
   `id_material` int(4) DEFAULT NULL,
   `id_comprobante` int(5) DEFAULT NULL,
@@ -94,7 +95,7 @@ CREATE TABLE `detalles` (
 -- Estructura de tabla para la tabla `documentos`
 --
 
-CREATE TABLE `documentos` (
+CREATE TABLE IF NOT EXISTS `documentos` (
   `id_documentos` int(6) NOT NULL,
   `fk_novedad` text DEFAULT NULL,
   `fk_material` int(4) DEFAULT NULL
@@ -106,8 +107,8 @@ CREATE TABLE `documentos` (
 -- Estructura de tabla para la tabla `fk_materiales_proveedores`
 --
 
-CREATE TABLE `fk_materiales_proveedores` (
-  `id_material` int(2) NOT NULL auto_increment,
+CREATE TABLE IF NOT EXISTS `fk_materiales_proveedores` (
+  `id_material` int(2) NOT NULL,
   `id_proveedor` int(2) NOT NULL,
   `fecha_salida` datetime DEFAULT NULL,
   `fecha_entrada` datetime DEFAULT NULL
@@ -119,8 +120,8 @@ CREATE TABLE `fk_materiales_proveedores` (
 -- Estructura de tabla para la tabla `implicados`
 --
 
-CREATE TABLE `implicados` (
-  `id_implicados` int(6) NOT NULL auto_increment,
+CREATE TABLE IF NOT EXISTS `implicados` (
+  `id_implicados` int(6) NOT NULL,
   `doc_implicadosistema` int(12) DEFAULT NULL,
   `doc_implicadoexterno` int(12) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -131,7 +132,7 @@ CREATE TABLE `implicados` (
 -- Estructura de tabla para la tabla `materiales`
 --
 
-CREATE TABLE `materiales` (
+CREATE TABLE IF NOT EXISTS `materiales` (
   `id_material` int(4) NOT NULL,
   `id_categorias` int(2) DEFAULT NULL,
   `nombre_material` varchar(60) DEFAULT NULL,
@@ -149,7 +150,7 @@ CREATE TABLE `materiales` (
 -- Estructura de tabla para la tabla `proveedor`
 --
 
-CREATE TABLE `proveedor` (
+CREATE TABLE IF NOT EXISTS `proveedor` (
   `id_proveedor` int(2) NOT NULL,
   `entidad` varchar(25) DEFAULT NULL,
   `id_material` int(2) DEFAULT NULL
@@ -161,7 +162,7 @@ CREATE TABLE `proveedor` (
 -- Estructura de tabla para la tabla `reportes`
 --
 
-CREATE TABLE `reportes` (
+CREATE TABLE IF NOT EXISTS `reportes` (
   `id_reporte` int(3) NOT NULL,
   `fecha_actual` datetime DEFAULT NULL,
   `descripcion` varchar(255) DEFAULT NULL,
@@ -180,7 +181,7 @@ CREATE TABLE `reportes` (
 -- Estructura de tabla para la tabla `roles`
 --
 
-CREATE TABLE `roles` (
+CREATE TABLE IF NOT EXISTS `roles` (
   `id_roles` varchar(12) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -190,7 +191,7 @@ CREATE TABLE `roles` (
 -- Estructura de tabla para la tabla `seguimiento`
 --
 
-CREATE TABLE `seguimiento` (
+CREATE TABLE IF NOT EXISTS `seguimiento` (
   `id_seguimiento` int(3) NOT NULL,
   `fk_reporte` varchar(40) DEFAULT NULL,
   `descripcion` varchar(255) DEFAULT NULL,
@@ -203,7 +204,7 @@ CREATE TABLE `seguimiento` (
 -- Estructura de tabla para la tabla `subcategorias`
 --
 
-CREATE TABLE `subcategorias` (
+CREATE TABLE IF NOT EXISTS `subcategorias` (
   `id_subcategorias` int(4) DEFAULT NULL,
   `fk_material` varchar(60) DEFAULT NULL,
   `nombre_subcategoria` varchar(35) DEFAULT NULL
@@ -215,7 +216,7 @@ CREATE TABLE `subcategorias` (
 -- Estructura de tabla para la tabla `ubicaciones`
 --
 
-CREATE TABLE `ubicaciones` (
+CREATE TABLE IF NOT EXISTS `ubicaciones` (
   `id_ubicaciones` int(4) NOT NULL,
   `nombre_ubicacion` varchar(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
