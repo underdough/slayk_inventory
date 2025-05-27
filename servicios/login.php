@@ -8,7 +8,7 @@ require_once 'config.php';
  */
 
 // Verificar si el usuario ya está autenticado
-if (isset($_SESSION['user_id'])) {
+if (isset($_SESSION['id_usuario'])) {
     // Redirigir al dashboard si ya está autenticado
     header("Location: ../vistas/dashboard.html");
     exit();
@@ -16,8 +16,8 @@ if (isset($_SESSION['user_id'])) {
 
 // Procesar el formulario cuando se envía
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $username = isset($_POST["correo"]) ? sanitizeInput($_POST["correo"]) : '';
-    $password = isset($_POST["contrasena"]) ? $_POST["contrasena"] : ''; // No sanitizamos la contraseña para no alterar caracteres especiales
+    $numeroDocumento = isset($_POST["numeroDocumento"]) ? sanitizeInput($_POST["numeroDocumento"]) : '';
+    $contrasena = isset($_POST["contrasena"]) ? $_POST["contrasena"] : ''; // No sanitizamos la contraseña para no alterar caracteres especiales
     
     // Verificar si hay demasiados intentos de login
     if (function_exists('registrarIntentoFallido')) {
@@ -32,62 +32,66 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
     
     // Validar entrada
-    if (empty($username) || empty($password)) {
-        $_SESSION["login_error"] = "Por favor, complete todos los campos.";
-        header("Location: ../login.php");
+    if (empty($numeroDocumento) || empty($contrasena)) {
+        $_SESSION["error_login"] = "Por favor, complete todos los campos.";
+        header("Location: ../login.html");
         exit();
     } else {
         // Obtener conexión a la base de datos
-        $conn = conectarDB();
+        $conexion = conectarDB();
         
         // Consulta preparada para prevenir inyección SQL
-        $stmt = $conn->prepare("SELECT `id`, `correo`, `contrasena`, role FROM `usuarios` WHERE `correo` = ?");
-        $stmt->bind_param("s", $username);
+        $stmt = $conexion->prepare("SELECT `num_doc`, `nombre`, `contrasena`, `rol` FROM `usuarios` WHERE `num_doc` = ?");
+        $stmt->bind_param("s", $numeroDocumento);
         $stmt->execute();
-        $result = $stmt->get_result();
+        $resultado = $stmt->get_result();
         
         // Aplicar cifrado MD5 a la contraseña ingresada
-        $password_md5 = md5($password);
+        $contrasena_md5 = md5($contrasena);
         
-        if ($result->num_rows == 1) {
-            $row = $result->fetch_assoc();
+        if ($resultado->num_rows == 1) {
+            $fila = $resultado->fetch_assoc();
             
             // Verificar contraseña con cifrado MD5
-            if ($password_md5 === $row["contrasena"]) {
+            if ($contrasena_md5 === $fila["contrasena"]) {
                 // Iniciar sesión
-                $_SESSION["user_id"] = $row["id"];
-                $_SESSION["correo"] = $row["correo"];
-                $_SESSION["rol"] = $row["rol"];
+                $_SESSION["id_usuario"] = $fila["num_doc"];
+                $_SESSION["nombre_usuario"] = $fila["nombre"];
+                $_SESSION["rol_usuario"] = $fila["rol"];
                 
                 // Recordar usuario si se seleccionó la casilla
-                if (isset($_POST["remember"]) && $_POST["remember"] == "on") {
+                if (isset($_POST["recuerdame"]) && $_POST["recuerdame"] == "on") {
                     $token = bin2hex(random_bytes(16));
                     
                     // Almacenar token en la base de datos
-                    $stmt = $conn->prepare("UPDATE `usuarios` SET remember_token = ? WHERE `id` = ?");
-                    $stmt->bind_param("si", $token, $row["id"]);
+                    $stmt = $conexion->prepare("UPDATE `usuarios` SET token_recordar = ? WHERE `num_doc` = ?");
+                    $stmt->bind_param("si", $token, $fila["num_doc"]);
                     $stmt->execute();
                     
                     // Establecer cookie (30 días)
-                    setcookie("remember_token", $token, time() + (86400 * 30), "/");
+                    setcookie("token_recordar", $token, time() + (86400 * 30), "/");
                 }
                 
                 // Redirigir según el rol
-                header("Location: ../vistas/dashboard.html");
+                if ($fila["rol"] === 'admin' || $fila["rol"] === 'administrador') {
+                    header("Location: ../vistas/dashboard.html");
+                } else {
+                    header("Location: ../vistas/productos.html");
+                }
                 exit();
             } else {
-                $_SESSION["login_error"] = "Usuario o contraseña incorrectos.";
-                header("Location: ../login.php");
+                $_SESSION["error_login"] = "Número de documento o contraseña incorrectos.";
+                header("Location: ../login.html");
                 exit();
             }
         } else {
-            $_SESSION["login_error"] = "Usuario o contraseña incorrectos.";
-            header("Location: ../login.php");
+            $_SESSION["error_login"] = "Número de documento o contraseña incorrectos.";
+            header("Location: ../login.html");
             exit();
         }
         
         $stmt->close();
-        $conn->close();
+        $conexion->close();
     }
 }
 

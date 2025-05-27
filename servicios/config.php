@@ -15,17 +15,15 @@ define('APP_VERSION', '1.0.0');
 define('BASE_URL', 'http://localhost/arco/');
 define('ROOT_PATH', dirname(__FILE__) . '/');
 
-// Configuración de sesión
-ini_set('session.cookie_httponly', 1);
-ini_set('session.use_only_cookies', 1);
-ini_set('session.cookie_secure', 0); // Cambiar a 1 en producción con HTTPS
+// Configuración de sesión - Estas configuraciones deben establecerse antes de session_start()
+// Se han movido a los archivos individuales que inician sesiones
 
 // Zona horaria
 date_default_timezone_set('America/Bogota');
 
 // Función para conectar a la base de datos
 function conectarDB() {
-    $conn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+    $conn = new mysqli("localhost", "root", "", "slayk");
     
     if ($conn->connect_error) {
         die("Error de conexión: " . $conn->connect_error);

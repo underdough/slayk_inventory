@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 14-02-2025 a las 16:57:39
+-- Tiempo de generación: 27-05-2025 a las 06:25:50
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de datos: `arco`
+-- Base de datos: `slayk`
 --
 
 -- --------------------------------------------------------
@@ -59,18 +59,7 @@ CREATE TABLE `comprobante` (
   `fecha_salida` datetime DEFAULT NULL,
   `cliente` int(2) DEFAULT NULL,
   `direccion` varchar(40) DEFAULT NULL,
-  `encargado` varchar(20) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `contrasena`
---
-
-CREATE TABLE `contrasena` (
-  `id_contrasena` int(12) NOT NULL,
-  `fk_usuario` int(12) DEFAULT NULL
+  `encargado` int(12) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -184,6 +173,13 @@ CREATE TABLE `roles` (
   `id_roles` varchar(12) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Volcado de datos para la tabla `roles`
+--
+
+INSERT INTO `roles` (`id_roles`) VALUES
+('administrado');
+
 -- --------------------------------------------------------
 
 --
@@ -231,11 +227,18 @@ CREATE TABLE `usuarios` (
   `nombre` varchar(20) NOT NULL,
   `apellido` varchar(25) NOT NULL,
   `rol` varchar(12) NOT NULL,
-  `cargos` varchar(12) NOT NULL,
+  `cargos` varchar(30) NOT NULL,
   `correo` varchar(64) NOT NULL,
-  `contrasena` varchar(16) NOT NULL,
-  `num_telefono` int(11) NOT NULL
+  `contrasena` varchar(255) NOT NULL,
+  `num_telefono` bigint(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `usuarios`
+--
+
+INSERT INTO `usuarios` (`num_doc`, `nombre`, `apellido`, `rol`, `cargos`, `correo`, `contrasena`, `num_telefono`) VALUES
+(100000001, 'Admin', 'Sistema', 'administrado', 'Administrador general', 'admin@inventario.com', '60fe74406e7f353ed979f350f2fbb6a2e8690a5fa7d1b0c32983d1d8b3f95f67', 1234567890);
 
 --
 -- Índices para tablas volcadas
@@ -260,13 +263,6 @@ ALTER TABLE `comprobante`
   ADD PRIMARY KEY (`id_comprobante`),
   ADD KEY `fk_comprobante_encargado` (`encargado`),
   ADD KEY `fk_comprobante_cliente` (`cliente`);
-
---
--- Indices de la tabla `contrasena`
---
-ALTER TABLE `contrasena`
-  ADD PRIMARY KEY (`id_contrasena`),
-  ADD KEY `fk_contrasena_usuario` (`fk_usuario`);
 
 --
 -- Indices de la tabla `detalles`
@@ -348,7 +344,6 @@ ALTER TABLE `ubicaciones`
 --
 ALTER TABLE `usuarios`
   ADD PRIMARY KEY (`num_doc`),
-  ADD UNIQUE KEY `nombre` (`nombre`),
   ADD KEY `fk_usuarios_roles` (`rol`);
 
 --
@@ -359,7 +354,7 @@ ALTER TABLE `usuarios`
 -- AUTO_INCREMENT de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `num_doc` int(12) NOT NULL AUTO_INCREMENT;
+  MODIFY `num_doc` int(12) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=100000002;
 
 --
 -- Restricciones para tablas volcadas
@@ -370,13 +365,7 @@ ALTER TABLE `usuarios`
 --
 ALTER TABLE `comprobante`
   ADD CONSTRAINT `fk_comprobante_cliente` FOREIGN KEY (`cliente`) REFERENCES `clientes` (`id_cliente`),
-  ADD CONSTRAINT `fk_comprobante_encargado` FOREIGN KEY (`encargado`) REFERENCES `usuarios` (`nombre`);
-
---
--- Filtros para la tabla `contrasena`
---
-ALTER TABLE `contrasena`
-  ADD CONSTRAINT `fk_contrasena_usuario` FOREIGN KEY (`fk_usuario`) REFERENCES `usuarios` (`num_doc`);
+  ADD CONSTRAINT `fk_comprobante_encargado` FOREIGN KEY (`encargado`) REFERENCES `usuarios` (`num_doc`);
 
 --
 -- Filtros para la tabla `detalles`

@@ -4,6 +4,11 @@
  * Este archivo maneja las solicitudes de recuperación de contraseña
  */
 
+// Configuración de sesión - debe establecerse antes de session_start()
+ini_set('session.cookie_httponly', 1);
+ini_set('session.use_only_cookies', 1);
+ini_set('session.cookie_secure', 0); // Cambiar a 1 en producción con HTTPS
+
 // Iniciar sesión para manejar tokens CSRF
 session_start();
 

@@ -14,14 +14,14 @@ if (ini_get("session.use_cookies")) {
 }
 
 // Eliminar la cookie de "recordar usuario" si existe
-if (isset($_COOKIE["remember_token"])) {
-    setcookie("remember_token", "", time() - 3600, "/");
+if (isset($_COOKIE["token_recordar"])) {
+    setcookie("token_recordar", "", time() - 3600, "/");
 }
 
 // Destruir la sesión
 session_destroy();
 
 // Redirigir a la página de inicio de sesión
-header("Location:   login.html");
+header("Location: ../login.html");
 exit();
 ?>

@@ -1,3 +1,28 @@
+<?php
+// Configuración de sesión - debe establecerse antes de session_start()
+ini_set('session.cookie_httponly', 1);
+ini_set('session.use_only_cookies', 1);
+ini_set('session.cookie_secure', 0); // Cambiar a 1 en producción con HTTPS
+
+session_start();
+require_once 'servicios/config.php';
+
+/**
+ * Página de login con token CSRF para ARCO
+ * Genera y valida tokens CSRF para prevenir ataques Cross-Site Request Forgery
+ */
+
+// Función para generar token CSRF
+function generarTokenCSRF() {
+    if (!isset($_SESSION['csrf_token'])) {
+        $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+    }
+    return $_SESSION['csrf_token'];
+}
+
+// Generar token CSRF para el formulario
+$csrfToken = generarTokenCSRF();
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -38,8 +63,8 @@
             <form id="formlogin" action="servicios/autenticador.php" method="post">
                 <!-- Campos ocultos para el procesamiento del formulario -->
                 <input type="hidden" name="action" value="login">
-                <!-- Nota: El token CSRF debe ser generado por PHP -->
-                <input type="hidden" name="csrf_token" value="">
+                <!-- Token CSRF generado dinámicamente -->
+                <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($csrfToken); ?>">
                 
                 <!-- Campo de número de documento -->
                 <div class="inputs-login">
@@ -117,7 +142,7 @@
         // Inicialización cuando el DOM está cargado
         document.addEventListener('DOMContentLoaded', function() {
             // Validación del formulario de login
-            const loginForm = document.getElementById('loginForm');
+            const loginForm = document.getElementById('formlogin');
             
             loginForm.addEventListener('submit', function(e) {
                 // Aquí puedes agregar validaciones adicionales si es necesario

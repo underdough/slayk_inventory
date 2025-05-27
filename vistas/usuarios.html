@@ -422,8 +422,8 @@
             
             // Realizar petición AJAX para obtener los datos del usuario
             const formData = new FormData();
-            formData.append('action', 'get');
-            formData.append('user_id', userId);
+            formData.append('action', 'obtener');
+            formData.append('numeroDocumento', userId);
             
             fetch('../servicios/usuarios_handler.php', {
                 method: 'POST',
@@ -431,20 +431,15 @@
             })
             .then(response => response.json())
             .then(data => {
-                if (data.success) {
+                if (data.exito) {
                     // Llenar el formulario con los datos del usuario
-                    const usuario = data.data;
+                    const usuario = data.datos;
                     
-                    // Separar el nombre completo en nombre y apellido (asumiendo formato: Nombre Apellido)
-                    const nombreCompleto = usuario.nombre.split(' ');
-                    const nombre = nombreCompleto[0] || '';
-                    const apellido = nombreCompleto.slice(1).join(' ') || '';
-                    
-                    document.getElementById('userName').value = nombre;
-                    document.getElementById('userLastName').value = apellido;
-                    document.getElementById('userEmail').value = usuario.email;
-                    document.getElementById('userRole').value = usuario.role;
-                    document.getElementById('userStatus').value = usuario.status;
+                    document.getElementById('userName').value = usuario.nombre || '';
+                    document.getElementById('userLastName').value = usuario.apellido || '';
+                    document.getElementById('userEmail').value = usuario.correo;
+                    document.getElementById('userRole').value = usuario.rol;
+                    document.getElementById('userStatus').value = usuario.estado;
                     
                     // Limpiar campos de contraseña
                     document.getElementById('userPassword').value = '';
@@ -452,7 +447,7 @@
                     
                     openUserModal();
                 } else {
-                    mostrarNotificacion('Error', data.message, 'error');
+                    mostrarNotificacion('Error', data.mensaje, 'error');
                 }
             })
             .catch(error => {
@@ -464,7 +459,7 @@
         // Función para cargar la lista de usuarios
         function cargarUsuarios() {
             const formData = new FormData();
-            formData.append('action', 'list');
+            formData.append('action', 'listar');
             
             fetch('../servicios/usuarios_handler.php', {
                 method: 'POST',
@@ -472,26 +467,26 @@
             })
             .then(response => response.json())
             .then(data => {
-                if (data.success) {
+                if (data.exito) {
                     const tbody = document.querySelector('.users-table tbody');
                     tbody.innerHTML = ''; // Limpiar tabla
                     
-                    data.data.forEach(usuario => {
+                    data.datos.forEach(usuario => {
                         const row = document.createElement('tr');
                         
-                        // Formatear la fecha de último acceso
-                        const lastLogin = usuario.last_login ? new Date(usuario.last_login).toLocaleString() : 'Nunca';
+                        // Mostrar información del usuario
+                        const nombreCompleto = `${usuario.nombre} ${usuario.apellido || ''}`;
                         
                         row.innerHTML = `
-                            <td>${usuario.id}</td>
-                            <td>${usuario.nombre}</td>
-                            <td>${usuario.email}</td>
-                            <td>${usuario.role}</td>
-                            <td>${lastLogin}</td>
-                            <td><span class="status status-${usuario.status ? 'activo' : 'inactivo'}">${usuario.status ? 'Activo' : 'Inactivo'}</span></td>
+                            <td>${usuario.num_doc}</td>
+                            <td>${nombreCompleto}</td>
+                            <td>${usuario.correo}</td>
+                            <td>${usuario.rol}</td>
+                            <td>${usuario.cargos || 'N/A'}</td>
+                            <td><span class="status status-${usuario.estado ? 'activo' : 'inactivo'}">${usuario.estado ? 'Activo' : 'Inactivo'}</span></td>
                             <td class="actions">
                                 <div class="action-icon edit"><i class="fas fa-edit"></i></div>
-                                <div class="action-icon delete"><i class="fas fa-${usuario.status ? 'ban' : 'check'}"></i></div>
+                                <div class="action-icon delete"><i class="fas fa-${usuario.estado ? 'ban' : 'check'}"></i></div>
                             </td>
                         `;
                         
@@ -500,21 +495,21 @@
                             document.querySelector('.modal-title').textContent = 'Editar Usuario';
                             document.getElementById('userPassword').required = false;
                             document.getElementById('userConfirmPassword').required = false;
-                            loadUserData(usuario.id);
+                            loadUserData(usuario.num_doc);
                         });
                         
                         // Añadir evento para cambiar estado
                         row.querySelector('.delete').addEventListener('click', function() {
-                            const accion = usuario.status ? 'desactivar' : 'activar';
+                            const accion = usuario.estado ? 'desactivar' : 'activar';
                             if (confirm(`¿Está seguro de que desea ${accion} este usuario?`)) {
-                                cambiarEstadoUsuario(usuario.id);
+                                cambiarEstadoUsuario(usuario.num_doc);
                             }
                         });
                         
                         tbody.appendChild(row);
                     });
                 } else {
-                    mostrarNotificacion('Error', data.message, 'error');
+                    mostrarNotificacion('Error', data.mensaje, 'error');
                 }
             })
             .catch(error => {
@@ -524,10 +519,10 @@
         }
         
         // Función para cambiar el estado de un usuario
-        function cambiarEstadoUsuario(userId) {
+        function cambiarEstadoUsuario(numeroDocumento) {
             const formData = new FormData();
-            formData.append('action', 'toggle_status');
-            formData.append('user_id', userId);
+            formData.append('action', 'cambiar_estado');
+            formData.append('numeroDocumento', numeroDocumento);
             
             fetch('../servicios/usuarios_handler.php', {
                 method: 'POST',
@@ -535,11 +530,11 @@
             })
             .then(response => response.json())
             .then(data => {
-                if (data.success) {
-                    mostrarNotificacion('Éxito', data.message, 'success');
+                if (data.exito) {
+                    mostrarNotificacion('Éxito', data.mensaje, 'success');
                     cargarUsuarios(); // Recargar la lista de usuarios
                 } else {
-                    mostrarNotificacion('Error', data.message, 'error');
+                    mostrarNotificacion('Error', data.mensaje, 'error');
                 }
             })
             .catch(error => {
@@ -614,16 +609,17 @@
                 
                 // Preparar datos para enviar
                 const formData = new FormData();
-                formData.append('action', 'update');
-                formData.append('user_id', currentUserId);
-                formData.append('nombre', document.getElementById('userName').value + ' ' + document.getElementById('userLastName').value);
-                formData.append('email', document.getElementById('userEmail').value);
-                formData.append('role', document.getElementById('userRole').value);
-                formData.append('status', document.getElementById('userStatus').value);
+                formData.append('action', 'actualizar');
+                formData.append('numeroDocumento', currentUserId);
+                formData.append('nombre', document.getElementById('userName').value);
+                formData.append('apellido', document.getElementById('userLastName').value);
+                formData.append('correo', document.getElementById('userEmail').value);
+                formData.append('rol', document.getElementById('userRole').value);
+                formData.append('estado', document.getElementById('userStatus').value);
                 
                 // Solo enviar contraseña si se ha ingresado una nueva
                 if (password) {
-                    formData.append('password', password);
+                    formData.append('contrasena', password);
                 }
                 
                 // Enviar datos al servidor
@@ -633,12 +629,12 @@
                 })
                 .then(response => response.json())
                 .then(data => {
-                    if (data.success) {
-                        mostrarNotificacion('Éxito', data.message, 'success');
+                    if (data.exito) {
+                        mostrarNotificacion('Éxito', data.mensaje, 'success');
                         closeUserModal();
                         cargarUsuarios(); // Recargar la lista de usuarios
                     } else {
-                        mostrarNotificacion('Error', data.message, 'error');
+                        mostrarNotificacion('Error', data.mensaje, 'error');
                     }
                 })
                 .catch(error => {

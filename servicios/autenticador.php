@@ -1,4 +1,9 @@
 <?php
+// Configuración de sesión - debe establecerse antes de session_start()
+ini_set('session.cookie_httponly', 1);
+ini_set('session.use_only_cookies', 1);
+ini_set('session.cookie_secure', 0); // Cambiar a 1 en producción con HTTPS
+
 session_start();
 require_once 'config.php';
 
@@ -8,16 +13,15 @@ require_once 'config.php';
  */
 
 // Función para conectar a la base de datos
-function conectarDB() {
-    global $servername, $username, $password, $dbname;
+function conectarBaseDatos() {
     
-    $conn = new mysqli($servername, $username, $password, $dbname);
+    $conexionBD = new mysqli("localhost", "root","", "slayk");
     
-    if ($conn->connect_error) {
-        die("Error de conexión: " . $conn->connect_error);
+    if ($conexionBD->connect_error) {
+        die("Error de conexión: " . $conexionBD->connect_error);
     }
     
-    return $conn;
+    return $conexionBD;
 }
 
 // Función para sanitizar entradas
@@ -42,28 +46,28 @@ function validarContrasena($contrasena) {
 }
 
 // Función para registrar intentos de login fallidos
-function registrarIntentoFallido($ip) {
-    $conn = conectarDB();
+function registrarIntentoFallido($direccionIP) {
+    $conexionBD = conectarBaseDatos();
     
     // Limpiar intentos antiguos (más de 15 minutos)
-    $stmt = $conn->prepare("DELETE FROM login_attempts WHERE timestamp < DATE_SUB(NOW(), INTERVAL 15 MINUTE)");
-    $stmt->execute();
+    $consulta = $conexionBD->prepare("DELETE FROM login_attempts WHERE timestamp < DATE_SUB(NOW(), INTERVAL 15 MINUTE)");
+    $consulta->execute();
     
     // Registrar nuevo intento
-    $stmt = $conn->prepare("INSERT INTO login_attempts (ip_address, timestamp) VALUES (?, NOW())");
-    $stmt->bind_param("s", $ip);
-    $stmt->execute();
+    $consulta = $conexionBD->prepare("INSERT INTO login_attempts (ip_address, timestamp) VALUES (?, NOW())");
+    $consulta->bind_param("s", $direccionIP);
+    $consulta->execute();
     
     // Verificar si hay demasiados intentos
-    $stmt = $conn->prepare("SELECT COUNT(*) as intentos FROM login_attempts WHERE ip_address = ? AND timestamp > DATE_SUB(NOW(), INTERVAL 15 MINUTE)");
-    $stmt->bind_param("s", $ip);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    $row = $result->fetch_assoc();
+    $consulta = $conexionBD->prepare("SELECT COUNT(*) as intentos FROM login_attempts WHERE ip_address = ? AND timestamp > DATE_SUB(NOW(), INTERVAL 15 MINUTE)");
+    $consulta->bind_param("s", $direccionIP);
+    $consulta->execute();
+    $resultadoConsulta = $consulta->get_result();
+    $filaResultado = $resultadoConsulta->fetch_assoc();
     
-    $conn->close();
+    $conexionBD->close();
     
-    return $row['intentos'];
+    return $filaResultado['intentos'];
 }
 
 // Función para generar token CSRF
@@ -84,59 +88,79 @@ $action = isset($_POST['action']) ? $_POST['action'] : '';
 
 // Verificar token CSRF para todas las solicitudes POST
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (!isset($_POST['csrf_token']) || !verificarTokenCSRF($_POST['csrf_token'])) {
-        // Token CSRF inválido
-        header("Location: ../login.php?error=" . urlencode("Error de seguridad. Por favor, intente nuevamente."));
+    // Verificar que existe el token en la solicitud
+    if (!isset($_POST['csrf_token']) || empty($_POST['csrf_token'])) {
+        error_log("Token CSRF faltante en la solicitud POST desde IP: " . $_SERVER['REMOTE_ADDR']);
+        header("Location: ../login.php?error=" . urlencode("Error de seguridad: Token CSRF faltante. Por favor, intente nuevamente."));
         exit();
     }
+    
+    // Verificar que existe el token en la sesión
+    if (!isset($_SESSION['csrf_token']) || empty($_SESSION['csrf_token'])) {
+        error_log("Token CSRF faltante en la sesión para IP: " . $_SERVER['REMOTE_ADDR']);
+        header("Location: ../login.php?error=" . urlencode("Error de seguridad: Sesión inválida. Por favor, intente nuevamente."));
+        exit();
+    }
+    
+    // Verificar que los tokens coinciden
+    if (!verificarTokenCSRF($_POST['csrf_token'])) {
+        error_log("Token CSRF inválido desde IP: " . $_SERVER['REMOTE_ADDR'] . " - Token recibido: " . substr($_POST['csrf_token'], 0, 10) . "...");
+        // Regenerar token para la próxima solicitud
+        unset($_SESSION['csrf_token']);
+        header("Location: ../login.php?error=" . urlencode("Error de seguridad: Token CSRF inválido. Por favor, intente nuevamente."));
+        exit();
+    }
+    
+    // Log de verificación exitosa (solo para debugging, remover en producción)
+    error_log("Token CSRF verificado exitosamente para IP: " . $_SERVER['REMOTE_ADDR']);
 }
 
 // Procesar login
 if ($action === 'login') {
-    $username = sanitizeInput($_POST['username']);
-    $password = $_POST['password']; // No sanitizamos la contraseña para no alterar caracteres especiales
+    $numeroDocumento = sanitizeInput($_POST['numeroDocumento']);
+    $contrasena = $_POST['contrasena']; // No sanitizamos la contraseña para no alterar caracteres especiales
     
     // Verificar si hay demasiados intentos de login
-    $ip = $_SERVER['REMOTE_ADDR'];
-    $intentos = registrarIntentoFallido($ip);
+    $direccionIP = $_SERVER['REMOTE_ADDR'];
+    $intentosLogin = registrarIntentoFallido($direccionIP);
     
-    if ($intentos > 5) {
+    if ($intentosLogin > 5) {
         header("Location: ../login.php?error=" . urlencode("Demasiados intentos de inicio de sesión. Por favor, intente más tarde."));
         exit();
     }
     
-    if (empty($username) || empty($password)) {
+    if (empty($numeroDocumento) || empty($contrasena)) {
         header("Location: ../login.php?error=" . urlencode("Por favor, complete todos los campos."));
         exit();
     }
     
-    $conn = conectarDB();
+    $conexionBD = conectarBaseDatos();
     
     // Consulta preparada para prevenir inyección SQL
-    $stmt = $conn->prepare("SELECT id, username, password, role FROM usuarios WHERE username = ?");
-    $stmt->bind_param("s", $username);
-    $stmt->execute();
-    $result = $stmt->get_result();
+    $consultaUsuario = $conexionBD->prepare("SELECT num_doc, nombre, contrasena, rol FROM usuarios WHERE num_doc = ?");
+    $consultaUsuario->bind_param("s", $numeroDocumento);
+    $consultaUsuario->execute();
+    $resultadoUsuario = $consultaUsuario->get_result();
     
     // Aplicar cifrado MD5 a la contraseña ingresada
-    $password_md5 = md5($password);
+    $contrasenaEncriptada = md5($contrasena);
     
-    if ($result->num_rows === 1) {
-        $row = $result->fetch_assoc();
+    if ($resultadoUsuario->num_rows === 1) {
+        $datosUsuario = $resultadoUsuario->fetch_assoc();
         
-        if ($row['password'] === $password_md5) {
+        if ($datosUsuario['contrasena'] === $contrasenaEncriptada) {
             // Login exitoso
-            $_SESSION['user_id'] = $row['id'];
-            $_SESSION['username'] = $row['username'];
-            $_SESSION['role'] = $row['role'];
+            $_SESSION['id_usuario'] = $datosUsuario['num_doc'];
+            $_SESSION['nombre_usuario'] = $datosUsuario['nombre'];
+            $_SESSION['rol_usuario'] = $datosUsuario['rol'];
             
             // Registrar la hora de inicio de sesión
-            $stmt = $conn->prepare("UPDATE usuarios SET last_login = NOW() WHERE id = ?");
-            $stmt->bind_param("i", $row['id']);
-            $stmt->execute();
+            $actualizarAcceso = $conexionBD->prepare("UPDATE usuarios SET ultimo_acceso = NOW() WHERE num_doc = ?");
+            $actualizarAcceso->bind_param("i", $datosUsuario['num_doc']);
+            $actualizarAcceso->execute();
             
             // Redirigir según el rol
-            if ($row['role'] === 'admin') {
+            if ($datosUsuario['rol'] === 'admin' || $datosUsuario['rol'] === 'administrador') {
                 header("Location: ../vistas/dashboard.html");
             } else {
                 header("Location: ../vistas/productos.html");
@@ -144,16 +168,19 @@ if ($action === 'login') {
             exit();
         } else {
             // Contraseña incorrecta
-            header("Location: ../login.php?error=" . urlencode("Usuario o contraseña incorrectos."));
+            header("Location: ../login.php?error=" . urlencode("Número de documento o contraseña incorrectos."));
             exit();
         }
     } else {
         // Usuario no encontrado
-        header("Location: ../login.php?error=" . urlencode("Usuario o contraseña incorrectos."));
+        header("Location: ../login.php?error=" . urlencode("Número de documento o contraseña incorrectos."));
         exit();
     }
     
-    $conn->close();
+    // Move connection close before any exit() calls to ensure it's always executed
+    $conexionBD->close();
+    header("Location: ../login.html?error=" . urlencode("Número de documento o contraseña incorrectos."));
+    exit();
 }
 
 // La funcionalidad de registro ha sido eliminada

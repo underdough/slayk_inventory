@@ -8,13 +8,13 @@ require_once 'config.php';
  */
 
 // Verificar si el usuario está autenticado
-if (!isset($_SESSION['user_id'])) {
-    header("Location: ../login.php?error=" . urlencode("Debe iniciar sesión para acceder a esta función."));
+if (!isset($_SESSION['id_usuario'])) {
+    header("Location: ../login.html?error=" . urlencode("Debe iniciar sesión para acceder a esta función."));
     exit();
 }
 
 // Verificar si el usuario tiene permisos de administrador
-if ($_SESSION['role'] !== 'admin') {
+if ($_SESSION['rol_usuario'] !== 'admin' && $_SESSION['rol_usuario'] !== 'administrador') {
     header("Location: ../vistas/dashboard.html?error=" . urlencode("No tiene permisos para gestionar usuarios."));
     exit();
 }
@@ -31,150 +31,150 @@ function sanitizeInput($data) {
 $action = isset($_POST['action']) ? $_POST['action'] : '';
 
 // Actualizar usuario existente
-if ($action === 'update') {
+if ($action === 'actualizar') {
     // Obtener y sanitizar datos del formulario
-    $user_id = isset($_POST['user_id']) ? intval($_POST['user_id']) : 0;
+    $numeroDocumento = isset($_POST['numeroDocumento']) ? intval($_POST['numeroDocumento']) : 0;
     $nombre = sanitizeInput($_POST['nombre']);
-    $email = sanitizeInput($_POST['email']);
-    $role = sanitizeInput($_POST['role']);
-    $status = isset($_POST['status']) ? 1 : 0;
-    $password = isset($_POST['password']) ? $_POST['password'] : ''; // No sanitizamos la contraseña
+    $correo = sanitizeInput($_POST['correo']);
+    $rol = sanitizeInput($_POST['rol']);
+    $estado = isset($_POST['estado']) ? 1 : 0;
+    $contrasena = isset($_POST['contrasena']) ? $_POST['contrasena'] : ''; // No sanitizamos la contraseña
     
-    // Validar que el ID de usuario sea válido
-    if ($user_id <= 0) {
-        echo json_encode(['success' => false, 'message' => 'ID de usuario inválido']);
+    // Validar que el número de documento sea válido
+    if ($numeroDocumento <= 0) {
+        echo json_encode(['exito' => false, 'mensaje' => 'Número de documento inválido']);
         exit();
     }
     
     // Conectar a la base de datos
-    $conn = conectarDB();
+    $conexion = conectarDB();
     
     // Verificar si el usuario existe
-    $stmt = $conn->prepare("SELECT id FROM usuarios WHERE id = ?");
-    $stmt->bind_param("i", $user_id);
+    $stmt = $conexion->prepare("SELECT num_doc FROM usuarios WHERE num_doc = ?");
+    $stmt->bind_param("i", $numeroDocumento);
     $stmt->execute();
-    $result = $stmt->get_result();
+    $resultado = $stmt->get_result();
     
-    if ($result->num_rows === 0) {
-        echo json_encode(['success' => false, 'message' => 'El usuario no existe']);
-        $conn->close();
+    if ($resultado->num_rows === 0) {
+        echo json_encode(['exito' => false, 'mensaje' => 'El usuario no existe']);
+        $conexion->close();
         exit();
     }
     
     // Preparar la consulta SQL para actualizar el usuario
-    if (!empty($password)) {
+    if (!empty($contrasena)) {
         // Si se proporciona una nueva contraseña, actualizarla también
-        $password_md5 = md5($password);
-        $stmt = $conn->prepare("UPDATE usuarios SET nombre = ?, email = ?, role = ?, status = ?, password = ? WHERE id = ?");
-        $stmt->bind_param("sssisi", $nombre, $email, $role, $status, $password_md5, $user_id);
+        $contrasena_md5 = md5($contrasena);
+        $stmt = $conexion->prepare("UPDATE usuarios SET nombre = ?, correo = ?, rol = ?, estado = ?, contrasena = ? WHERE num_doc = ?");
+        $stmt->bind_param("sssisi", $nombre, $correo, $rol, $estado, $contrasena_md5, $numeroDocumento);
     } else {
         // Si no se proporciona contraseña, actualizar solo los otros campos
-        $stmt = $conn->prepare("UPDATE usuarios SET nombre = ?, email = ?, role = ?, status = ? WHERE id = ?");
-        $stmt->bind_param("sssii", $nombre, $email, $role, $status, $user_id);
+        $stmt = $conexion->prepare("UPDATE usuarios SET nombre = ?, correo = ?, rol = ?, estado = ? WHERE num_doc = ?");
+        $stmt->bind_param("sssii", $nombre, $correo, $rol, $estado, $numeroDocumento);
     }
     
     // Ejecutar la consulta
     if ($stmt->execute()) {
-        echo json_encode(['success' => true, 'message' => 'Usuario actualizado correctamente']);
+        echo json_encode(['exito' => true, 'mensaje' => 'Usuario actualizado correctamente']);
     } else {
-        echo json_encode(['success' => false, 'message' => 'Error al actualizar el usuario: ' . $conn->error]);
+        echo json_encode(['exito' => false, 'mensaje' => 'Error al actualizar el usuario: ' . $conexion->error]);
     }
     
-    $conn->close();
+    $conexion->close();
     exit();
 }
 
 // Obtener lista de usuarios
-if ($action === 'list') {
+if ($action === 'listar') {
     // Conectar a la base de datos
-    $conn = conectarDB();
+    $conexion = conectarDB();
     
     // Consultar todos los usuarios
-    $stmt = $conn->prepare("SELECT id, nombre, username, email, role, status, last_login, created_at FROM usuarios ORDER BY id DESC");
+    $stmt = $conexion->prepare("SELECT num_doc, nombre, apellido, correo, rol, cargos, num_telefono FROM usuarios ORDER BY num_doc DESC");
     $stmt->execute();
-    $result = $stmt->get_result();
+    $resultado = $stmt->get_result();
     
     $usuarios = [];
-    while ($row = $result->fetch_assoc()) {
-        $usuarios[] = $row;
+    while ($fila = $resultado->fetch_assoc()) {
+        $usuarios[] = $fila;
     }
     
-    echo json_encode(['success' => true, 'data' => $usuarios]);
-    $conn->close();
+    echo json_encode(['exito' => true, 'datos' => $usuarios]);
+    $conexion->close();
     exit();
 }
 
 // Obtener detalles de un usuario específico
-if ($action === 'get') {
-    $user_id = isset($_POST['user_id']) ? intval($_POST['user_id']) : 0;
+if ($action === 'obtener') {
+    $numeroDocumento = isset($_POST['numeroDocumento']) ? intval($_POST['numeroDocumento']) : 0;
     
-    if ($user_id <= 0) {
-        echo json_encode(['success' => false, 'message' => 'ID de usuario inválido']);
+    if ($numeroDocumento <= 0) {
+        echo json_encode(['exito' => false, 'mensaje' => 'Número de documento inválido']);
         exit();
     }
     
     // Conectar a la base de datos
-    $conn = conectarDB();
+    $conexion = conectarDB();
     
     // Consultar el usuario
-    $stmt = $conn->prepare("SELECT id, nombre, username, email, role, status, last_login, created_at FROM usuarios WHERE id = ?");
-    $stmt->bind_param("i", $user_id);
+    $stmt = $conexion->prepare("SELECT num_doc, nombre, apellido, correo, rol, cargos, num_telefono FROM usuarios WHERE num_doc = ?");
+    $stmt->bind_param("i", $numeroDocumento);
     $stmt->execute();
-    $result = $stmt->get_result();
+    $resultado = $stmt->get_result();
     
-    if ($result->num_rows === 0) {
-        echo json_encode(['success' => false, 'message' => 'Usuario no encontrado']);
+    if ($resultado->num_rows === 0) {
+        echo json_encode(['exito' => false, 'mensaje' => 'Usuario no encontrado']);
     } else {
-        $usuario = $result->fetch_assoc();
-        echo json_encode(['success' => true, 'data' => $usuario]);
+        $usuario = $resultado->fetch_assoc();
+        echo json_encode(['exito' => true, 'datos' => $usuario]);
     }
     
-    $conn->close();
+    $conexion->close();
     exit();
 }
 
 // Cambiar estado de un usuario (activar/desactivar)
-if ($action === 'toggle_status') {
-    $user_id = isset($_POST['user_id']) ? intval($_POST['user_id']) : 0;
+if ($action === 'cambiar_estado') {
+    $numeroDocumento = isset($_POST['numeroDocumento']) ? intval($_POST['numeroDocumento']) : 0;
     
-    if ($user_id <= 0) {
-        echo json_encode(['success' => false, 'message' => 'ID de usuario inválido']);
+    if ($numeroDocumento <= 0) {
+        echo json_encode(['exito' => false, 'mensaje' => 'Número de documento inválido']);
         exit();
     }
     
     // Conectar a la base de datos
-    $conn = conectarDB();
+    $conexion = conectarDB();
     
     // Obtener el estado actual
-    $stmt = $conn->prepare("SELECT status FROM usuarios WHERE id = ?");
-    $stmt->bind_param("i", $user_id);
+    $stmt = $conexion->prepare("SELECT estado FROM usuarios WHERE num_doc = ?");
+    $stmt->bind_param("i", $numeroDocumento);
     $stmt->execute();
-    $result = $stmt->get_result();
+    $resultado = $stmt->get_result();
     
-    if ($result->num_rows === 0) {
-        echo json_encode(['success' => false, 'message' => 'Usuario no encontrado']);
-        $conn->close();
+    if ($resultado->num_rows === 0) {
+        echo json_encode(['exito' => false, 'mensaje' => 'Usuario no encontrado']);
+        $conexion->close();
         exit();
     }
     
-    $row = $result->fetch_assoc();
-    $new_status = $row['status'] ? 0 : 1; // Cambiar el estado
+    $fila = $resultado->fetch_assoc();
+    $nuevo_estado = $fila['estado'] ? 0 : 1; // Cambiar el estado
     
     // Actualizar el estado
-    $stmt = $conn->prepare("UPDATE usuarios SET status = ? WHERE id = ?");
-    $stmt->bind_param("ii", $new_status, $user_id);
+    $stmt = $conexion->prepare("UPDATE usuarios SET estado = ? WHERE num_doc = ?");
+    $stmt->bind_param("ii", $nuevo_estado, $numeroDocumento);
     
     if ($stmt->execute()) {
-        echo json_encode(['success' => true, 'message' => 'Estado del usuario actualizado correctamente', 'new_status' => $new_status]);
+        echo json_encode(['exito' => true, 'mensaje' => 'Estado del usuario actualizado correctamente', 'nuevo_estado' => $nuevo_estado]);
     } else {
-        echo json_encode(['success' => false, 'message' => 'Error al actualizar el estado del usuario: ' . $conn->error]);
+        echo json_encode(['exito' => false, 'mensaje' => 'Error al actualizar el estado del usuario: ' . $conexion->error]);
     }
     
-    $conn->close();
+    $conexion->close();
     exit();
 }
 
 // Si no se especifica una acción válida
-echo json_encode(['success' => false, 'message' => 'Acción no válida']);
+echo json_encode(['exito' => false, 'mensaje' => 'Acción no válida']);
 exit();
 ?>
