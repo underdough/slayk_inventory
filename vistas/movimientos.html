@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ARCO - Gestión de Movimientos</title>
+    <link rel="stylesheet" href="../public/componentes/formato.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <!-- Añadir FontAwesome para iconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../public/componentes/movimientos.css">
+    <link rel="stylesheet" href="../public/componentes/global.css">
+</head>
+<body>
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h1>ARCO</h1>
+            <p class="subtlo">Gestión de Inventario</p>
+        </div>
+        <div class="sidebar-menu">
+            <a href="dashboard.html" class="menu-item">
+                <i class="fas fa-tachometer-alt"></i>
+                <span class="menu-text">Dashboard</span>
+            </a>
+            <a href="productos.html" class="menu-item">
+                <i class="fas fa-box"></i>
+                <span class="menu-text">Productos</span>
+            </a>
+            <a href="categorias.html" class="menu-item">
+                <i class="fas fa-tags"></i>
+                <span class="menu-text">Categorías</span>
+            </a>
+            <a href="movimientos.html" class="menu-item active">
+                <i class="fas fa-exchange-alt"></i>
+                <span class="menu-text">Movimientos</span>
+            </a>
+            <a href="usuarios.html" class="menu-item">
+                <i class="fas fa-users"></i>
+                <span class="menu-text">Usuarios</span>
+            </a>
+            <a href="reportes.html" class="menu-item">
+                <i class="fas fa-chart-bar"></i>
+                <span class="menu-text">Reportes</span>
+            </a>
+            <a href="configuracion.html" class="menu-item">
+                <i class="fas fa-cog"></i>
+                <span class="menu-text">Configuración</span>
+            </a>
+            <a href="../servicios/logout.php" class="menu-item">
+                <i class="fas fa-sign-out-alt"></i>
+                <span class="menu-text">Cerrar Sesión</span>
+            </a>
+        </div>
+    </div>
+    
+    <div class="main-content">
+        <div class="header">
+            <h2>Gestión de Movimientos</h2>
+            <div class="search-bar">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="Buscar movimientos...">
+            </div>
+            <div class="action-buttons">
+                <button class="btn btn-secondary">
+                    <i class="fas fa-filter"></i> Filtrar
+                </button>
+                <button class="btn btn-primary" id="btnAddMovement">
+                    <i class="fas fa-plus"></i> Nuevo Movimiento
+                </button>
+            </div>
+        </div>
+        
+        <div class="movements-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Fecha</th>
+                        <th>Tipo</th>
+                        <th>Producto</th>
+                        <th>Cantidad</th>
+                        <th>Usuario</th>
+                        <th>Notas</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>001</td>
+                        <td>15/05/2023</td>
+                        <td><span class="status status-entrada">Entrada</span></td>
+                        <td>Laptop HP Pavilion</td>
+                        <td>+10</td>
+                        <td>Admin</td>
+                        <td>Compra de nuevos equipos</td>
+                        <td class="actions">
+                            <div class="action-icon view"><i class="fas fa-eye"></i></div>
+                            <div class="action-icon print"><i class="fas fa-print"></i></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>002</td>
+                        <td>18/05/2023</td>
+                        <td><span class="status status-salida">Salida</span></td>
+                        <td>Monitor Dell 27"</td>
+                        <td>-2</td>
+                        <td>Admin</td>
+                        <td>Venta a cliente</td>
+                        <td class="actions">
+                            <div class="action-icon view"><i class="fas fa-eye"></i></div>
+                            <div class="action-icon print"><i class="fas fa-print"></i></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>003</td>
+                        <td>20/05/2023</td>
+                        <td><span class="status status-ajuste">Ajuste</span></td>
+                        <td>Teclado Mecánico RGB</td>
+                        <td>+5</td>
+                        <td>Supervisor</td>
+                        <td>Ajuste de inventario</td>
+                        <td class="actions">
+                            <div class="action-icon view"><i class="fas fa-eye"></i></div>
+                            <div class="action-icon print"><i class="fas fa-print"></i></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>004</td>
+                        <td>22/05/2023</td>
+                        <td><span class="status status-entrada">Entrada</span></td>
+                        <td>Mouse Inalámbrico</td>
+                        <td>+15</td>
+                        <td>Admin</td>
+                        <td>Reposición de stock</td>
+                        <td class="actions">
+                            <div class="action-icon view"><i class="fas fa-eye"></i></div>
+                            <div class="action-icon print"><i class="fas fa-print"></i></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>005</td>
+                        <td>25/05/2023</td>
+                        <td><span class="status status-salida">Salida</span></td>
+                        <td>Impresora Multifuncional</td>
+                        <td>-3</td>
+                        <td>Vendedor</td>
+                        <td>Venta a cliente corporativo</td>
+                        <td class="actions">
+                            <div class="action-icon view"><i class="fas fa-eye"></i></div>
+                            <div class="action-icon print"><i class="fas fa-print"></i></div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="pagination">
+            <div class="page-item"><i class="fas fa-chevron-left"></i></div>
+            <div class="page-item active">1</div>
+            <div class="page-item">2</div>
+            <div class="page-item">3</div>
+            <div class="page-item"><i class="fas fa-chevron-right"></i></div>
+        </div>
+    </div>
+    
+    <!-- Modal para registrar movimiento -->
+    <div class="modal" id="movementModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Registrar Nuevo Movimiento</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <form id="movementForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="movementType">Tipo de Movimiento</label>
+                        <select class="form-control" id="movementType" required>
+                            <option value="">Seleccionar tipo</option>
+                            <option value="entrada">Entrada</option>
+                            <option value="salida">Salida</option>
+                            <option value="ajuste">Ajuste</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="movementDate">Fecha</label>
+                        <input type="date" class="form-control" id="movementDate" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="movementProduct">Producto</label>
+                    <select class="form-control" id="movementProduct" required>
+                        <option value="">Seleccionar producto</option>
+                        <option value="1">Laptop HP Pavilion</option>
+                        <option value="2">Monitor Dell 27"</option>
+                        <option value="3">Teclado Mecánico RGB</option>
+                        <option value="4">Mouse Inalámbrico</option>
+                        <option value="5">Impresora Multifuncional</option>
+                    </select>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="movementQuantity">Cantidad</label>
+                        <input type="number" class="form-control" id="movementQuantity" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="movementUser">Usuario</label>
+                        <select class="form-control" id="movementUser" required>
+                            <option value="1">Admin</option>
+                            <option value="2">Supervisor</option>
+                            <option value="3">Vendedor</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="movementNotes">Notas</label>
+                    <textarea class="form-control" id="movementNotes" rows="3"></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" id="btnCancelMovement">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <script>
+        // JavaScript para funcionalidad interactiva
+        document.addEventListener('DOMContentLoaded', function() {
+            const modal = document.getElementById('movementModal');
+            const btnAddMovement = document.getElementById('btnAddMovement');
+            const btnCancelMovement = document.getElementById('btnCancelMovement');
+            const closeModal = document.querySelector('.close-modal');
+            const viewButtons = document.querySelectorAll('.view');
+            const printButtons = document.querySelectorAll('.print');
+            
+            // Abrir modal para registrar movimiento
+            btnAddMovement.addEventListener('click', function() {
+                modal.style.display = 'flex';
+                document.getElementById('movementForm').reset();
+                // Establecer la fecha actual por defecto
+                const today = new Date().toISOString().split('T')[0];
+                document.getElementById('movementDate').value = today;
+            });
+            
+            // Cerrar modal
+            function closeMovementModal() {
+                modal.style.display = 'none';
+            }
+            
+            btnCancelMovement.addEventListener('click', closeMovementModal);
+            closeModal.addEventListener('click', closeMovementModal);
+            
+            // Cerrar modal al hacer clic fuera del contenido
+            window.addEventListener('click', function(event) {
+                if (event.target === modal) {
+                    closeMovementModal();
+                }
+            });
+            
+            // Ver detalles del movimiento
+            viewButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // Aquí iría la lógica para mostrar detalles del movimiento
+                    alert('Ver detalles del movimiento');
+                });
+            });
+            
+            // Imprimir movimiento
+            printButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // Aquí iría la lógica para imprimir el movimiento
+                    alert('Imprimir movimiento');
+                });
+            });
+            
+            // Manejar envío del formulario
+            document.getElementById('movementForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                // Aquí iría la lógica para guardar el movimiento
+                alert('Movimiento registrado correctamente');
+                closeMovementModal();
+            });
+        });
+    </script>
+</body>
+</html>

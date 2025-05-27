@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ARCO - Configuración</title>
+    <link rel="stylesheet" href="../public/componentes/formato-verde.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <!-- Añadir FontAwesome para iconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../public/componentes/configuracion.css">
+    <link rel="stylesheet" href="../public/componentes/global.css">
+</head>
+<body>
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h1>ARCO</h1>
+            <p class="subtlo">Gestión de Inventario</p>
+        </div>
+        <div class="sidebar-menu">
+            <a href="dashboard.html" class="menu-item">
+                <i class="fas fa-tachometer-alt"></i>
+                <span class="menu-text">Dashboard</span>
+            </a>
+            <a href="productos.html" class="menu-item">
+                <i class="fas fa-box"></i>
+                <span class="menu-text">Productos</span>
+            </a>
+            <a href="categorias.html" class="menu-item">
+                <i class="fas fa-tags"></i>
+                <span class="menu-text">Categorías</span>
+            </a>
+            <a href="movimientos.html" class="menu-item">
+                <i class="fas fa-exchange-alt"></i>
+                <span class="menu-text">Movimientos</span>
+            </a>
+            <a href="usuarios.html" class="menu-item">
+                <i class="fas fa-users"></i>
+                <span class="menu-text">Usuarios</span>
+            </a>
+            <a href="reportes.html" class="menu-item">
+                <i class="fas fa-chart-bar"></i>
+                <span class="menu-text">Reportes</span>
+            </a>
+            <a href="configuracion.html" class="menu-item active">
+                <i class="fas fa-cog"></i>
+                <span class="menu-text">Configuración</span>
+            </a>
+            <a href="../servicios/logout.php" class="menu-item">
+                <i class="fas fa-sign-out-alt"></i>
+                <span class="menu-text">Cerrar Sesión</span>
+            </a>
+        </div>
+    </div>
+    
+    <div class="main-content">
+        <div class="header">
+            <h2>Configuración del Sistema</h2>
+            <button class="btn btn-primary" id="btnSaveAllSettings">
+                <i class="fas fa-save"></i> Guardar Todos los Cambios
+            </button>
+        </div>
+        
+        <!-- Sección de Información de la Empresa -->
+        <div class="config-section">
+            <h3><i class="fas fa-building"></i> Información de la Empresa</h3>
+            <form id="companyInfoForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="companyName">Nombre de la Empresa</label>
+                        <input type="text" class="form-control" id="companyName" value="ARCO Inventarios S.A.">
+                    </div>
+                    <div class="form-group">
+                        <label for="companyTaxId">NIF/CIF</label>
+                        <input type="text" class="form-control" id="companyTaxId" value="B12345678">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="companyAddress">Dirección</label>
+                        <input type="text" class="form-control" id="companyAddress" value="Calle Principal 123">
+                    </div>
+                    <div class="form-group">
+                        <label for="companyCity">Ciudad</label>
+                        <input type="text" class="form-control" id="companyCity" value="Madrid">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="companyPhone">Teléfono</label>
+                        <input type="text" class="form-control" id="companyPhone" value="+34 912 345 678">
+                    </div>
+                    <div class="form-group">
+                        <label for="companyEmail">Email</label>
+                        <input type="email" class="form-control" id="companyEmail" value="contacto@arcoinventarios.com">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="companyLogo">Logo de la Empresa</label>
+                    <input type="file" class="form-control" id="companyLogo">
+                    <small>Tamaño recomendado: 200x200px. Formatos: JPG, PNG</small>
+                </div>
+                <div class="section-actions">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Guardar Información
+                    </button>
+                </div>
+            </form>
+        </div>
+        
+        <!-- Sección de Preferencias de Notificaciones -->
+        <div class="config-section">
+            <h3><i class="fas fa-bell"></i> Preferencias de Notificaciones</h3>
+            <div class="form-group">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                    <label>Notificaciones de Stock Bajo</label>
+                    <label class="switch">
+                        <input type="checkbox" id="notifyLowStock" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="form-group" id="lowStockThresholdGroup">
+                    <label for="lowStockThreshold">Umbral de Stock Bajo (%)</label>
+                    <input type="number" class="form-control" id="lowStockThreshold" value="15" min="1" max="100">
+                </div>
+            </div>
+            <div class="form-group">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                    <label>Notificaciones de Movimientos</label>
+                    <label class="switch">
+                        <input type="checkbox" id="notifyMovements" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                    <label>Notificaciones por Email</label>
+                    <label class="switch">
+                        <input type="checkbox" id="notifyEmail">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="form-group" id="emailNotificationsGroup" style="display: none;">
+                    <label for="notificationEmails">Emails para Notificaciones (separados por coma)</label>
+                    <input type="text" class="form-control" id="notificationEmails" placeholder="admin@ejemplo.com, gerente@ejemplo.com">
+                </div>
+            </div>
+            <div class="section-actions">
+                <button class="btn btn-primary" id="saveNotificationSettings">
+                    <i class="fas fa-save"></i> Guardar Preferencias
+                </button>
+            </div>
+        </div>
+        
+        <!-- Sección de Copias de Seguridad -->
+        <div class="config-section">
+            <h3><i class="fas fa-database"></i> Copias de Seguridad</h3>
+            <div class="form-group">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                    <label>Copias de Seguridad Automáticas</label>
+                    <label class="switch">
+                        <input type="checkbox" id="autoBackup" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+            <div class="form-group" id="backupFrequencyGroup">
+                <label for="backupFrequency">Frecuencia de Copias</label>
+                <select class="form-control" id="backupFrequency">
+                    <option value="daily">Diaria</option>
+                    <option value="weekly" selected>Semanal</option>
+                    <option value="monthly">Mensual</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="backupRetention">Retención de Copias (días)</label>
+                <input type="number" class="form-control" id="backupRetention" value="30" min="1">
+            </div>
+            <div class="form-group">
+                <label>Última Copia de Seguridad: <span id="lastBackupDate">15/06/2023 08:30</span></label>
+            </div>
+            <div class="section-actions">
+                <button class="btn btn-secondary" id="createBackupNow">
+                    <i class="fas fa-download"></i> Crear Copia Ahora
+                </button>
+                <button class="btn btn-primary" id="saveBackupSettings">
+                    <i class="fas fa-save"></i> Guardar Configuración
+                </button>
+            </div>
+        </div>
+        
+        <!-- Sección de Permisos de Usuarios -->
+        <div class="config-section">
+            <h3><i class="fas fa-user-shield"></i> Permisos de Usuarios</h3>
+            <div class="form-group">
+                <label for="userRoles">Rol de Usuario</label>
+                <select class="form-control" id="userRoles">
+                    <option value="admin">Administrador</option>
+                    <option value="manager">Gerente</option>
+                    <option value="operator">Operador</option>
+                    <option value="viewer">Visualizador</option>
+                </select>
+            </div>
+            <table class="permission-table">
+                <thead>
+                    <tr>
+                        <th>Módulo</th>
+                        <th>Ver</th>
+                        <th>Crear</th>
+                        <th>Editar</th>
+                        <th>Eliminar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Productos</td>
+                        <td><input type="checkbox" class="perm-check" data-module="products" data-action="view" checked></td>
+                        <td><input type="checkbox" class="perm-check" data-module="products" data-action="create" checked></td>
+                        <td><input type="checkbox" class="perm-check" data-module="products" data-action="edit" checked></td>
+                        <td><input type="checkbox" class="perm-check" data-module="products" data-action="delete" checked></td>
+                    </tr>
+                    <tr>
+                        <td>Categorías</td>
+                        <td><input type="checkbox" class="perm-check" data-module="categories" data-action="view" checked></td>
+                        <td><input type="checkbox" class="perm-check" data-module="categories" data-action="create" checked></td>
+                        <td><input type="checkbox" class="perm-check" data-module="categories" data-action="edit" checked></td>
+                        <td><input type="checkbox" class="perm-check" data-module="categories" data-action="delete" checked></td>
+                    </tr>
+                    <tr>
+                        <td>Movimientos</td>
+                        <td><input type="checkbox" class="perm-check" data-module="movements" data-action="view" checked></td>
+                        <td><input type="checkbox" class="perm-check" data-module="movements" data-action="create" checked></td>
+                        <td><input type="checkbox" class="perm-check" data-module="movements" data-action="edit" checked></td>
+                        <td><input type="checkbox" class="perm-check" data-module="movements" data-action="delete" checked></td>
+                    </tr>
+                    <tr>
+                        <td>Reportes</td>
+                        <td><input type="checkbox" class="perm-check" data-module="reports" data-action="view" checked></td>
+                        <td><input type="checkbox" class="perm-check" data-module="reports" data-action="create" checked></td>
+                        <td><input type="checkbox" class="perm-check" data-module="reports" data-action="edit" checked></td>
+                        <td><input type="checkbox" class="perm-check" data-module="reports" data-action="delete" checked></td>
+                    </tr>
+                    <tr>
+                        <td>Usuarios</td>
+                        <td><input type="checkbox" class="perm-check" data-module="users" data-action="view" checked></td>
+                        <td><input type="checkbox" class="perm-check" data-module="users" data-action="create" checked></td>
+                        <td><input type="checkbox" class="perm-check" data-module="users" data-action="edit" checked></td>
+                        <td><input type="checkbox" class="perm-check" data-module="users" data-action="delete" checked></td>
+                    </tr>
+                    <tr>
+                        <td>Configuración</td>
+                        <td><input type="checkbox" class="perm-check" data-module="settings" data-action="view" checked></td>
+                        <td><input type="checkbox" class="perm-check" data-module="settings" data-action="create" disabled></td>
+                        <td><input type="checkbox" class="perm-check" data-module="settings" data-action="edit" checked></td>
+                        <td><input type="checkbox" class="perm-check" data-module="settings" data-action="delete" disabled></td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="section-actions">
+                <button class="btn btn-secondary" id="resetPermissions">
+                    <i class="fas fa-undo"></i> Restablecer
+                </button>
+                <button class="btn btn-primary" id="savePermissions">
+                    <i class="fas fa-save"></i> Guardar Permisos
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // JavaScript para funcionalidad interactiva
+        document.addEventListener('DOMContentLoaded', function() {
+            // Manejar formulario de información de empresa
+            document.getElementById('companyInfoForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                alert('Información de la empresa guardada correctamente');
+            });
+            
+            // Manejar notificaciones por email
+            const notifyEmail = document.getElementById('notifyEmail');
+            const emailNotificationsGroup = document.getElementById('emailNotificationsGroup');
+            
+            notifyEmail.addEventListener('change', function() {
+                emailNotificationsGroup.style.display = this.checked ? 'block' : 'none';
+            });
+            
+            // Manejar notificaciones de stock bajo
+            const notifyLowStock = document.getElementById('notifyLowStock');
+            const lowStockThresholdGroup = document.getElementById('lowStockThresholdGroup');
+            
+            notifyLowStock.addEventListener('change', function() {
+                lowStockThresholdGroup.style.display = this.checked ? 'block' : 'none';
+            });
+            
+            // Manejar copias de seguridad automáticas
+            const autoBackup = document.getElementById('autoBackup');
+            const backupFrequencyGroup = document.getElementById('backupFrequencyGroup');
+            
+            autoBackup.addEventListener('change', function() {
+                backupFrequencyGroup.style.display = this.checked ? 'block' : 'none';
+            });
+            
+            // Manejar botón de crear copia ahora
+            document.getElementById('createBackupNow').addEventListener('click', function() {
+                alert('Creando copia de seguridad...');
+                setTimeout(function() {
+                    const now = new Date();
+                    const formattedDate = now.toLocaleDateString() + ' ' + now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                    document.getElementById('lastBackupDate').textContent = formattedDate;
+                    alert('Copia de seguridad creada correctamente');
+                }, 1500);
+            });
+            
+            // Manejar cambios en roles de usuario
+            document.getElementById('userRoles').addEventListener('change', function() {
+                const role = this.value;
+                const permChecks = document.querySelectorAll('.perm-check');
+                
+                // Restablecer todos los checkboxes
+                permChecks.forEach(check => {
+                    check.checked = false;
+                });
+                
+                // Configurar permisos según el rol seleccionado
+                switch(role) {
+                    case 'admin':
+                        permChecks.forEach(check => {
+                            if (!check.disabled) check.checked = true;
+                        });
+                        break;
+                    case 'manager':
+                        permChecks.forEach(check => {
+                            const module = check.dataset.module;
+                            const action = check.dataset.action;
+                            
+                            // Los gerentes pueden ver todo y editar casi todo
+                            if (action === 'view') check.checked = true;
+                            if (action === 'create' && module !== 'users' && module !== 'settings') check.checked = true;
+                            if (action === 'edit' && module !== 'users' && module !== 'settings') check.checked = true;
+                            if (action === 'delete' && module !== 'users' && module !== 'settings' && module !== 'categories') check.checked = true;
+                        });
+                        break;
+                    case 'operator':
+                        permChecks.forEach(check => {
+                            const module = check.dataset.module;
+                            const action = check.dataset.action;
+                            
+                            // Los operadores pueden ver todo y editar productos y movimientos
+                            if (action === 'view') check.checked = true;
+                            if ((action === 'create' || action === 'edit') && 
+                                (module === 'products' || module === 'movements')) check.checked = true;
+                        });
+                        break;
+                    case 'viewer':
+                        permChecks.forEach(check => {
+                            const action = check.dataset.action;
+                            // Los visualizadores solo pueden ver
+                            if (action === 'view') check.checked = true;
+                        });
+                        break;
+                }
+            });
+            
+            // Manejar botón de restablecer permisos
+            document.getElementById('resetPermissions').addEventListener('click', function() {
+                // Simular un cambio en el rol para restablecer los permisos
+                const event = new Event('change');
+                document.getElementById('userRoles').dispatchEvent(event);
+            });
+            
+            // Manejar botón de guardar permisos
+            document.getElementById('savePermissions').addEventListener('click', function() {
+                alert('Permisos guardados correctamente');
+            });
+            
+            // Manejar botón de guardar preferencias de notificaciones
+            document.getElementById('saveNotificationSettings').addEventListener('click', function() {
+                alert('Preferencias de notificaciones guardadas correctamente');
+            });
+            
+            // Manejar botón de guardar configuración de copias de seguridad
+            document.getElementById('saveBackupSettings').addEventListener('click', function() {
+                alert('Configuración de copias de seguridad guardada correctamente');
+            });
+            
+            // Manejar botón de guardar todos los cambios
+            document.getElementById('btnSaveAllSettings').addEventListener('click', function() {
+                alert('Todos los cambios han sido guardados correctamente');
+            });
+        });
+    </script>
+</body>
+</html>
