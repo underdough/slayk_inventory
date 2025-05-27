@@ -50,10 +50,10 @@ if ($action === 'actualizar') {
     $conexion = conectarDB();
     
     // Verificar si el usuario existe
-    $stmt = $conexion->prepare("SELECT num_doc FROM usuarios WHERE num_doc = ?");
-    $stmt->bind_param("i", $numeroDocumento);
-    $stmt->execute();
-    $resultado = $stmt->get_result();
+    $sentencia = $conexion->prepare("SELECT num_doc FROM usuarios WHERE num_doc = ?");
+    $sentencia->bind_param("i", $numeroDocumento);
+    $sentencia->execute();
+    $resultado = $sentencia->get_result();
     
     if ($resultado->num_rows === 0) {
         echo json_encode(['exito' => false, 'mensaje' => 'El usuario no existe']);
@@ -65,16 +65,16 @@ if ($action === 'actualizar') {
     if (!empty($contrasena)) {
         // Si se proporciona una nueva contraseña, actualizarla también
         $contrasena_md5 = md5($contrasena);
-        $stmt = $conexion->prepare("UPDATE usuarios SET nombre = ?, correo = ?, rol = ?, estado = ?, contrasena = ? WHERE num_doc = ?");
-        $stmt->bind_param("sssisi", $nombre, $correo, $rol, $estado, $contrasena_md5, $numeroDocumento);
+        $sentencia = $conexion->prepare("UPDATE usuarios SET nombre = ?, correo = ?, rol = ?, estado = ?, contrasena = ? WHERE num_doc = ?");
+        $sentencia->bind_param("sssisi", $nombre, $correo, $rol, $estado, $contrasena_md5, $numeroDocumento);
     } else {
         // Si no se proporciona contraseña, actualizar solo los otros campos
-        $stmt = $conexion->prepare("UPDATE usuarios SET nombre = ?, correo = ?, rol = ?, estado = ? WHERE num_doc = ?");
-        $stmt->bind_param("sssii", $nombre, $correo, $rol, $estado, $numeroDocumento);
+        $sentencia = $conexion->prepare("UPDATE usuarios SET nombre = ?, correo = ?, rol = ?, estado = ? WHERE num_doc = ?");
+        $sentencia->bind_param("sssii", $nombre, $correo, $rol, $estado, $numeroDocumento);
     }
     
     // Ejecutar la consulta
-    if ($stmt->execute()) {
+    if ($sentencia->execute()) {
         echo json_encode(['exito' => true, 'mensaje' => 'Usuario actualizado correctamente']);
     } else {
         echo json_encode(['exito' => false, 'mensaje' => 'Error al actualizar el usuario: ' . $conexion->error]);
@@ -90,9 +90,9 @@ if ($action === 'listar') {
     $conexion = conectarDB();
     
     // Consultar todos los usuarios
-    $stmt = $conexion->prepare("SELECT num_doc, nombre, apellido, correo, rol, cargos, num_telefono FROM usuarios ORDER BY num_doc DESC");
-    $stmt->execute();
-    $resultado = $stmt->get_result();
+    $sentencia = $conexion->prepare("SELECT num_doc, nombre, apellido, correo, rol, cargos, num_telefono FROM usuarios ORDER BY num_doc DESC");
+    $sentencia->execute();
+    $resultado = $sentencia->get_result();
     
     $usuarios = [];
     while ($fila = $resultado->fetch_assoc()) {
@@ -117,10 +117,10 @@ if ($action === 'obtener') {
     $conexion = conectarDB();
     
     // Consultar el usuario
-    $stmt = $conexion->prepare("SELECT num_doc, nombre, apellido, correo, rol, cargos, num_telefono FROM usuarios WHERE num_doc = ?");
-    $stmt->bind_param("i", $numeroDocumento);
-    $stmt->execute();
-    $resultado = $stmt->get_result();
+    $sentencia = $conexion->prepare("SELECT num_doc, nombre, apellido, correo, rol, cargos, num_telefono FROM usuarios WHERE num_doc = ?");
+    $sentencia->bind_param("i", $numeroDocumento);
+    $sentencia->execute();
+    $resultado = $sentencia->get_result();
     
     if ($resultado->num_rows === 0) {
         echo json_encode(['exito' => false, 'mensaje' => 'Usuario no encontrado']);
@@ -146,10 +146,10 @@ if ($action === 'cambiar_estado') {
     $conexion = conectarDB();
     
     // Obtener el estado actual
-    $stmt = $conexion->prepare("SELECT estado FROM usuarios WHERE num_doc = ?");
-    $stmt->bind_param("i", $numeroDocumento);
-    $stmt->execute();
-    $resultado = $stmt->get_result();
+    $sentencia = $conexion->prepare("SELECT estado FROM usuarios WHERE num_doc = ?");
+    $sentencia->bind_param("i", $numeroDocumento);
+    $sentencia->execute();
+    $resultado = $sentencia->get_result();
     
     if ($resultado->num_rows === 0) {
         echo json_encode(['exito' => false, 'mensaje' => 'Usuario no encontrado']);
@@ -161,10 +161,10 @@ if ($action === 'cambiar_estado') {
     $nuevo_estado = $fila['estado'] ? 0 : 1; // Cambiar el estado
     
     // Actualizar el estado
-    $stmt = $conexion->prepare("UPDATE usuarios SET estado = ? WHERE num_doc = ?");
-    $stmt->bind_param("ii", $nuevo_estado, $numeroDocumento);
+    $sentencia = $conexion->prepare("UPDATE usuarios SET estado = ? WHERE num_doc = ?");
+    $sentencia->bind_param("ii", $nuevo_estado, $numeroDocumento);
     
-    if ($stmt->execute()) {
+    if ($sentencia->execute()) {
         echo json_encode(['exito' => true, 'mensaje' => 'Estado del usuario actualizado correctamente', 'nuevo_estado' => $nuevo_estado]);
     } else {
         echo json_encode(['exito' => false, 'mensaje' => 'Error al actualizar el estado del usuario: ' . $conexion->error]);

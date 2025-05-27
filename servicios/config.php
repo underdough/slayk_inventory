@@ -23,15 +23,15 @@ date_default_timezone_set('America/Bogota');
 
 // Función para conectar a la base de datos
 function conectarDB() {
-    $conn = new mysqli("localhost", "root", "", "slayk");
+    $conexion = new mysqli("localhost", "root", "", "slayk");
     
-    if ($conn->connect_error) {
-        die("Error de conexión: " . $conn->connect_error);
+    if ($conexion->connect_error) {
+        die("Error de conexión: " . $conexion->connect_error);
     }
     
-    $conn->set_charset("utf8");
+    $conexion->set_charset("utf8");
     
-    return $conn;
+    return $conexion;
 }
 
 // Función para sanitizar entradas

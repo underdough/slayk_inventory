@@ -41,10 +41,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $conexion = conectarDB();
         
         // Consulta preparada para prevenir inyección SQL
-        $stmt = $conexion->prepare("SELECT `num_doc`, `nombre`, `contrasena`, `rol` FROM `usuarios` WHERE `num_doc` = ?");
-        $stmt->bind_param("s", $numeroDocumento);
-        $stmt->execute();
-        $resultado = $stmt->get_result();
+        $sentencia = $conexion->prepare("SELECT `num_doc`, `nombre`, `contrasena`, `rol` FROM `usuarios` WHERE `num_doc` = ?");
+        $sentencia->bind_param("s", $numeroDocumento);
+        $sentencia->execute();
+        $resultado = $sentencia->get_result();
         
         // Aplicar cifrado MD5 a la contraseña ingresada
         $contrasena_md5 = md5($contrasena);
@@ -64,9 +64,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $token = bin2hex(random_bytes(16));
                     
                     // Almacenar token en la base de datos
-                    $stmt = $conexion->prepare("UPDATE `usuarios` SET token_recordar = ? WHERE `num_doc` = ?");
-                    $stmt->bind_param("si", $token, $fila["num_doc"]);
-                    $stmt->execute();
+                    $sentencia = $conexion->prepare("UPDATE `usuarios` SET token_recordar = ? WHERE `num_doc` = ?");
+                    $sentencia->bind_param("si", $token, $fila["num_doc"]);
+                    $sentencia->execute();
                     
                     // Establecer cookie (30 días)
                     setcookie("token_recordar", $token, time() + (86400 * 30), "/");
@@ -90,7 +90,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             exit();
         }
         
-        $stmt->close();
+        $sentencia->close();
         $conexion->close();
     }
 }
