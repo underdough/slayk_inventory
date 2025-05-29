@@ -15,8 +15,8 @@ define('APP_VERSION', '1.0.0');
 define('BASE_URL', 'http://localhost/arco/');
 define('ROOT_PATH', dirname(__FILE__) . '/');
 
-// Configuración de sesión - Estas configuraciones deben establecerse antes de session_start()
-// Se han movido a los archivos individuales que inician sesiones
+// Configuración de sesión eliminada para evitar conflictos
+// Las configuraciones de sesión se manejan en cada archivo individual
 
 // Zona horaria
 date_default_timezone_set('America/Bogota');

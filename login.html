@@ -35,11 +35,7 @@
             </div>
             
             <!-- Formulario de Login -->
-            <form id="formlogin" action="servicios/autenticador.php" method="post">
-                <!-- Campos ocultos para el procesamiento del formulario -->
-                <input type="hidden" name="action" value="login">
-                <!-- Nota: El token CSRF debe ser generado por PHP -->
-                <input type="hidden" name="csrf_token" value="">
+            <form id="formlogin" action="login.php" method="post">
                 
                 <!-- Campo de número de documento -->
                 <div class="inputs-login">
@@ -117,11 +113,27 @@
         // Inicialización cuando el DOM está cargado
         document.addEventListener('DOMContentLoaded', function() {
             // Validación del formulario de login
-            const loginForm = document.getElementById('loginForm');
+            const loginForm = document.getElementById('formlogin');
             
-            loginForm.addEventListener('submit', function(e) {
-                // Aquí puedes agregar validaciones adicionales si es necesario
-            });
+            if (loginForm) {
+                loginForm.addEventListener('submit', function(e) {
+                    // Validaciones básicas
+                    const numeroDocumento = document.getElementById('numeroDocumento').value;
+                    const contrasena = document.getElementById('contrasena').value;
+                    
+                    if (!numeroDocumento || !contrasena) {
+                        e.preventDefault();
+                        showAlert('Por favor, complete todos los campos.', 'danger');
+                        return false;
+                    }
+                    
+                    if (!/^[0-9]{6,12}$/.test(numeroDocumento)) {
+                        e.preventDefault();
+                        showAlert('El número de documento debe tener entre 6 y 12 dígitos.', 'danger');
+                        return false;
+                    }
+                });
+            }
             
             // Verificar si hay mensajes de error o éxito en la URL
             const urlParams = new URLSearchParams(window.location.search);

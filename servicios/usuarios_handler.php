@@ -9,13 +9,13 @@ require_once 'config.php';
 
 // Verificar si el usuario está autenticado
 if (!isset($_SESSION['id_usuario'])) {
-    header("Location: ../login.html?error=" . urlencode("Debe iniciar sesión para acceder a esta función."));
+    echo json_encode(['exito' => false, 'mensaje' => 'Debe iniciar sesión para acceder a esta función.']);
     exit();
 }
 
 // Verificar si el usuario tiene permisos de administrador
 if ($_SESSION['rol_usuario'] !== 'admin' && $_SESSION['rol_usuario'] !== 'administrador') {
-    header("Location: ../vistas/dashboard.html?error=" . urlencode("No tiene permisos para gestionar usuarios."));
+    echo json_encode(['exito' => false, 'mensaje' => 'No tiene permisos para gestionar usuarios.']);
     exit();
 }
 
@@ -37,7 +37,7 @@ if ($action === 'actualizar') {
     $nombre = sanitizeInput($_POST['nombre']);
     $correo = sanitizeInput($_POST['correo']);
     $rol = sanitizeInput($_POST['rol']);
-    $estado = isset($_POST['estado']) ? 1 : 0;
+    $estado = isset($_POST['estado']) ? intval($_POST['estado']) : 0;
     $contrasena = isset($_POST['contrasena']) ? $_POST['contrasena'] : ''; // No sanitizamos la contraseña
     
     // Validar que el número de documento sea válido
@@ -90,7 +90,7 @@ if ($action === 'listar') {
     $conexion = conectarDB();
     
     // Consultar todos los usuarios
-    $sentencia = $conexion->prepare("SELECT num_doc, nombre, apellido, correo, rol, cargos, num_telefono FROM usuarios ORDER BY num_doc DESC");
+    $sentencia = $conexion->prepare("SELECT num_doc, nombre, apellido, correo, rol, cargos, num_telefono, estado FROM usuarios ORDER BY num_doc DESC");
     $sentencia->execute();
     $resultado = $sentencia->get_result();
     
@@ -117,7 +117,7 @@ if ($action === 'obtener') {
     $conexion = conectarDB();
     
     // Consultar el usuario
-    $sentencia = $conexion->prepare("SELECT num_doc, nombre, apellido, correo, rol, cargos, num_telefono FROM usuarios WHERE num_doc = ?");
+    $sentencia = $conexion->prepare("SELECT num_doc, nombre, apellido, correo, rol, cargos, num_telefono, estado FROM usuarios WHERE num_doc = ?");
     $sentencia->bind_param("i", $numeroDocumento);
     $sentencia->execute();
     $resultado = $sentencia->get_result();

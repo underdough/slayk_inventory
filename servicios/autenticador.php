@@ -125,12 +125,14 @@ if ($action === 'login') {
     $intentosLogin = registrarIntentoFallido($direccionIP);
     
     if ($intentosLogin > 5) {
-        header("Location: ../login.php?error=" . urlencode("Demasiados intentos de inicio de sesión. Por favor, intente más tarde."));
+        $_SESSION["error_login"] = "Demasiados intentos de inicio de sesión. Por favor, intente más tarde.";
+        header("Location: ../login.php");
         exit();
     }
     
     if (empty($numeroDocumento) || empty($contrasena)) {
-        header("Location: ../login.php?error=" . urlencode("Por favor, complete todos los campos."));
+        $_SESSION["error_login"] = "Por favor, complete todos los campos.";
+        header("Location: ../login.php");
         exit();
     }
     
@@ -168,12 +170,14 @@ if ($action === 'login') {
             exit();
         } else {
             // Contraseña incorrecta
-            header("Location: ../login.php?error=" . urlencode("Número de documento o contraseña incorrectos."));
+            $_SESSION["error_login"] = "Número de documento o contraseña incorrectos.";
+            header("Location: ../login.php");
             exit();
         }
     } else {
         // Usuario no encontrado
-        header("Location: ../login.php?error=" . urlencode("Número de documento o contraseña incorrectos."));
+        $_SESSION["error_login"] = "Número de documento o contraseña incorrectos.";
+        header("Location: ../login.php");
         exit();
     }
     

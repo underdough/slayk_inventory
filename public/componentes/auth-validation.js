@@ -289,3 +289,138 @@ function resetLoginAttempts() {
     localStorage.removeItem('loginAttempts');
     localStorage.removeItem('loginLockTime');
 }
+
+// ===== FUNCIONES DE VALIDACIÓN DE PERMISOS DE ADMINISTRADOR =====
+
+// Función para verificar si el usuario está autenticado
+function verificarAutenticacion() {
+    // Determinar la ruta correcta según la ubicación del archivo
+    const rutaVerificacion = window.location.pathname.includes('/vistas/') 
+        ? '../servicios/verificar_sesion.php' 
+        : 'servicios/verificar_sesion.php';
+    
+    const rutaLogin = window.location.pathname.includes('/vistas/') 
+        ? '../login.php' 
+        : 'login.php';
+    
+    return fetch(rutaVerificacion)
+        .then(response => response.json())
+        .then(data => {
+            if (!data.autenticado) {
+                // Redirigir al login si no está autenticado
+                window.location.href = rutaLogin;
+                return false;
+            }
+            return data;
+        })
+        .catch(error => {
+            console.error('Error verificando autenticación:', error);
+            window.location.href = rutaLogin;
+            return false;
+        });
+}
+
+// Función para verificar si el usuario es administrador
+function verificarPermisoAdmin() {
+    return verificarAutenticacion()
+        .then(userData => {
+            if (!userData || (userData.rol !== 'admin' && userData.rol !== 'administrador')) {
+                // Mostrar mensaje de acceso denegado
+                mostrarAccesoDenegado();
+                return false;
+            }
+            return true;
+        });
+}
+
+// Función para mostrar mensaje de acceso denegado
+function mostrarAccesoDenegado() {
+    document.body.innerHTML = `
+        <div style="
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            font-family: 'Poppins', sans-serif;
+            text-align: center;
+            padding: 20px;
+        ">
+            <div style="
+                background: rgba(255, 255, 255, 0.1);
+                backdrop-filter: blur(10px);
+                border-radius: 20px;
+                padding: 40px;
+                box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+                border: 1px solid rgba(255, 255, 255, 0.2);
+                max-width: 500px;
+            ">
+                <i class="fas fa-shield-alt" style="font-size: 4rem; margin-bottom: 20px; color: #ff6b6b;"></i>
+                <h1 style="margin: 0 0 20px 0; font-size: 2.5rem; font-weight: 600;">Acceso Denegado</h1>
+                <p style="margin: 0 0 30px 0; font-size: 1.2rem; opacity: 0.9;">No tienes permisos para acceder a esta sección.</p>
+                <p style="margin: 0 0 30px 0; font-size: 1rem; opacity: 0.8;">Solo los administradores pueden gestionar usuarios y privilegios.</p>
+                <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+                    <button onclick="window.location.href='dashboard.html'" style="
+                        background: #4CAF50;
+                        color: white;
+                        border: none;
+                        padding: 12px 24px;
+                        border-radius: 8px;
+                        cursor: pointer;
+                        font-size: 1rem;
+                        font-weight: 500;
+                        transition: all 0.3s ease;
+                        display: flex;
+                        align-items: center;
+                        gap: 8px;
+                    " onmouseover="this.style.background='#45a049'" onmouseout="this.style.background='#4CAF50'">
+                        <i class="fas fa-home"></i> Ir al Dashboard
+                    </button>
+                    <button onclick="window.location.href='../servicios/logout.php'" style="
+                        background: #f44336;
+                        color: white;
+                        border: none;
+                        padding: 12px 24px;
+                        border-radius: 8px;
+                        cursor: pointer;
+                        font-size: 1rem;
+                        font-weight: 500;
+                        transition: all 0.3s ease;
+                        display: flex;
+                        align-items: center;
+                        gap: 8px;
+                    " onmouseover="this.style.background='#da190b'" onmouseout="this.style.background='#f44336'">
+                        <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+                    </button>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+// Función para inicializar la validación en páginas que requieren permisos de admin
+function inicializarValidacionAdmin() {
+    // Mostrar loading mientras se verifica
+    document.body.style.opacity = '0.5';
+    
+    verificarPermisoAdmin()
+        .then(tienePermiso => {
+            if (tienePermiso) {
+                // Restaurar visibilidad si tiene permisos
+                document.body.style.opacity = '1';
+            }
+            // Si no tiene permisos, mostrarAccesoDenegado() ya se encargó
+        });
+}
+
+// Función para validar acceso general (solo autenticación)
+function inicializarValidacionGeneral() {
+    verificarAutenticacion();
+}
+
+// Auto-ejecutar validación si se detecta que es una página de usuarios
+if (window.location.pathname.includes('usuarios.html')) {
+    document.addEventListener('DOMContentLoaded', inicializarValidacionAdmin);
+}
