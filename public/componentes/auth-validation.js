@@ -421,6 +421,6 @@ function inicializarValidacionGeneral() {
 }
 
 // Auto-ejecutar validación si se detecta que es una página de usuarios
-if (window.location.pathname.includes('usuarios.html')) {
+if (window.location.pathname.includes('usuarios.php')) {
     document.addEventListener('DOMContentLoaded', inicializarValidacionAdmin);
 }

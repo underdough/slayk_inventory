@@ -24,7 +24,7 @@ function responderJSON($data) {
 }
 
 // Verificar si existe una sesión activa
-if (!isset($_SESSION['documento_numero']) || empty($_SESSION['documento_numero'])) {
+if (!isset($_SESSION['id_usuario']) || empty($_SESSION['id_usuario'])) {
     responderJSON([
         'autenticado' => false,
         'mensaje' => 'No hay sesión activa'
@@ -48,9 +48,9 @@ if (isset($_SESSION['ultimo_acceso'])) {
 $_SESSION['ultimo_acceso'] = time();
 
 // Obtener información del usuario de la sesión
-$documentoNumero = $_SESSION['documento_numero'] ?? null;
+$documentoNumero = $_SESSION['id_usuario'] ?? null;
 $nombreUsuario = $_SESSION['nombre_usuario'] ?? null;
-$rolUsuario = $_SESSION['rol'] ?? null;
+$rolUsuario = $_SESSION['rol_usuario'] ?? null;
 
 // Validar que los datos esenciales estén presentes
 if (!$documentoNumero || !$rolUsuario) {
@@ -91,7 +91,7 @@ try {
 // Responder con información de la sesión
 responderJSON([
     'autenticado' => true,
-    'documento_numero' => $documentoNumero,
+    'id_usuario' => $documentoNumero,
     'nombre_usuario' => $nombreUsuario,
     'rol' => $rolUsuario,
     'es_admin' => in_array(strtolower($rolUsuario), ['admin', 'administrador']),
