@@ -23,7 +23,7 @@ date_default_timezone_set('America/Bogota');
 
 // Función para conectar a la base de datos
 function conectarDB() {
-    $conexion = new mysqli("localhost", "root", "", "slayk");
+    $conexion = new mysqli("localhost", "root", "", "arco_bdd");
     
     if ($conexion->connect_error) {
         die("Error de conexión: " . $conexion->connect_error);

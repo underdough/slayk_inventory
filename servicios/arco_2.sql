@@ -178,7 +178,7 @@ CREATE TABLE `roles` (
 --
 
 INSERT INTO `roles` (`id_roles`) VALUES
-('administrado');
+('administrador');
 
 -- --------------------------------------------------------
 
@@ -224,7 +224,7 @@ CREATE TABLE `ubicaciones` (
 
 CREATE TABLE `usuarios` (
   `num_doc` int(12) NOT NULL,
-  `nombre` varchar(20) NOT NULL,
+  `nombre` varchar(50) NOT NULL,
   `apellido` varchar(25) NOT NULL,
   `rol` varchar(12) NOT NULL,
   `cargos` varchar(30) NOT NULL,
@@ -238,7 +238,7 @@ CREATE TABLE `usuarios` (
 --
 
 INSERT INTO `usuarios` (`num_doc`, `nombre`, `apellido`, `rol`, `cargos`, `correo`, `contrasena`, `num_telefono`) VALUES
-(100000001, 'Admin', 'Sistema', 'administrado', 'Administrador general', 'admin@inventario.com', '60fe74406e7f353ed979f350f2fbb6a2e8690a5fa7d1b0c32983d1d8b3f95f67', 1234567890);
+(100000001, 'Admin', 'Sistema', 'administrador', 'Administrador general', 'admin@inventario.com', '60fe74406e7f353ed979f350f2fbb6a2e8690a5fa7d1b0c32983d1d8b3f95f67', 1234567890);
 
 --
 -- Índices para tablas volcadas

@@ -69,7 +69,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 }
                 
                 // Redirigir según el rol - todos los administradores van al dashboard
-                if ($fila["rol"] === 'admin' || $fila["rol"] === 'administrador') {
+                if ($fila["rol"] == 'admin' || $fila["rol"] == 'administrador') {
                     header("Location: vistas/dashboard.html");
                 } else {
                     header("Location: vistas/productos.html");

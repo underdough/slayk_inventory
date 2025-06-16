@@ -1,11 +1,12 @@
 :root {
-  --primary-color: #4CAF50; /* Verde claro */
-  --secondary-color: #2E7D32; /* Verde oscuro */
+  --primary-color: #3D5DEEF; /* Azul principal */
+  --secondary-color: #395886; /* Azul oscuro */
   --text-color: #333333; /* Negro suave para texto */
   --shadow-color: rgba(0, 0, 0, 0.247);
-  --border-color: #e0e0e0;
-  --light-bg: #f8f9fa;
-  --accent-color: #81C784; /* Verde más claro para acentos */
+  --border-color: #B1C9EF; /* Azul claro para bordes */
+  --light-bg: #F0F3FA; /* Fondo claro */
+  --accent-color: #8AAEE0; /* Azul medio para acentos */
+  --tertiary-color: #638ECB; /* Azul intermedio */
 }
 
 * {

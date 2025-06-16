@@ -15,7 +15,7 @@ require_once 'config.php';
 // Función para conectar a la base de datos
 function conectarBaseDatos() {
     
-    $conexionBD = new mysqli("localhost", "root","", "slayk");
+    $conexionBD = new mysqli("localhost", "root","", "arco_bdd");
     
     if ($conexionBD->connect_error) {
         die("Error de conexión: " . $conexionBD->connect_error);

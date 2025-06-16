@@ -90,11 +90,14 @@ try {
 
 // Responder con información de la sesión
 responderJSON([
+    'success' => true,
     'autenticado' => true,
-    'id_usuario' => $documentoNumero,
-    'nombre_usuario' => $nombreUsuario,
-    'rol' => $rolUsuario,
-    'es_admin' => in_array(strtolower($rolUsuario), ['admin', 'administrador']),
+    'usuario' => [
+        'id_usuario' => $documentoNumero,
+        'nombre_usuario' => $nombreUsuario,
+        'rol_usuario' => $rolUsuario,
+        'es_admin' => in_array(strtolower($rolUsuario), ['admin', 'administrador'])
+    ],
     'ultimo_acceso' => $_SESSION['ultimo_acceso'] ?? null,
     'mensaje' => 'Sesión válida'
 ]);

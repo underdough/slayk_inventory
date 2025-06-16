@@ -1,7 +1,36 @@
 <?php
+// Configuración de errores para depuración
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 // Verificar acceso de administrador
-require_once '../servicios/verificar_admin.php';
-verificarAccesoAdmin('../dashboard.html');
+try {
+    require_once '../servicios/verificar_admin.php';
+    
+    // Verificar si hay una sesión activa
+    if (!isset($_SESSION['id_usuario'])) {
+        // Si no hay sesión, redirigir al login
+        header('Location: ../login.html?error=' . urlencode('Debe iniciar sesión para acceder al sistema'));
+        exit();
+    }
+    
+    // Verificar si es administrador
+    if (!esAdministrador()) {
+        // Si no es administrador, redirigir al dashboard con mensaje
+        header('Location: ../vistas/dashboard.html?error=' . urlencode('Acceso denegado: Solo los administradores pueden gestionar usuarios'));
+        exit();
+    } else {
+        // Si es administrador, permitir el acceso
+        header('Location:../vistas/usuarios.html');
+    }
+    
+} catch (Exception $e) {
+    // En caso de error, mostrar mensaje y redirigir
+    echo "Error: " . $e->getMessage();
+    header('Location: ../login.html?error=sistema');
+    exit();
+}
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -29,35 +58,35 @@ verificarAccesoAdmin('../dashboard.html');
             <p class="subtlo">Gestión de Inventario</p>
         </div>
         <div class="sidebar-menu">
-            <a href="dashboard.html" class="menu-item">
+            <a href="../vistas/dashboard.html" class="menu-item">
                 <i class="fas fa-tachometer-alt"></i>
                 <span class="menu-text">Dashboard</span>
             </a>
-            <a href="productos.html" class="menu-item">
+            <a href="../vistas/productos.html" class="menu-item">
                 <i class="fas fa-box"></i>
                 <span class="menu-text">Productos</span>
             </a>
-            <a href="categorias.html" class="menu-item">
+            <a href="../vistas/categorias.html" class="menu-item">
                 <i class="fas fa-tags"></i>
                 <span class="menu-text">Categorías</span>
             </a>
-            <a href="movimientos.html" class="menu-item">
+            <a href="../vistas/movimientos.html" class="menu-item">
                 <i class="fas fa-exchange-alt"></i>
                 <span class="menu-text">Movimientos</span>
             </a>
-            <a href="usuarios.php" class="menu-item active">
+            <a href="../vistas/usuarios.php" class="menu-item active">
                 <i class="fas fa-users"></i>
                 <span class="menu-text">Usuarios</span>
             </a>
-            <a href="reportes.html" class="menu-item">
+            <a href="../vistas/reportes.html" class="menu-item">
                 <i class="fas fa-chart-bar"></i>
                 <span class="menu-text">Reportes</span>
             </a>
-            <a href="configuracion.html" class="menu-item">
+            <a href="../vistas/configuracion.html" class="menu-item">
                 <i class="fas fa-cog"></i>
                 <span class="menu-text">Configuración</span>
             </a>
-            <a href="../servicios/logout.php" class="menu-item">
+            <a href="logout.php" class="menu-item">
                 <i class="fas fa-sign-out-alt"></i>
                 <span class="menu-text">Cerrar Sesión</span>
             </a>

@@ -1,6 +1,10 @@
 :root {
-    --primary-color: #2c3e50;
-    --secondary-color: #3498db;
+    --primary-color: #3D5DEF; /* Azul principal */
+    --secondary-color: #395886; /* Azul oscuro */
+    --tertiary-color: #638ECB; /* Azul intermedio */
+    --accent-color: #8AAEE0; /* Azul medio para acentos */
+    --border-color: #B1C9EF; /* Azul claro para bordes */
+    --light-bg: #F0F3FA; /* Fondo claro */
     --success-color: #27ae60;
     --warning-color: #f39c12;
     --danger-color: #e74c3c;

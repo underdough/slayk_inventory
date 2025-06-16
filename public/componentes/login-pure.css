@@ -1,11 +1,13 @@
 :root {
-    --color-primario: #4CAF50; /* Verde claro */
-    --color-secundario: #2E7D32; /* Verde oscuro */
+    --color-primario: #3D5DEF; /* Azul principal */
+    --color-secundario: #395886; /* Azul oscuro */
     --texto: #333;
-    --bg-color: #1e7413d7;
+    --bg-color: #638ECB; /* Azul intermedio para fondo */
     --color-error: #e74c3c;
     --color-correcto: #27ae60;
-    --color-borde: #ddd;
+    --color-borde: #B1C9EF; /* Azul claro para bordes */
+    --accent-color: #8AAEE0; /* Azul medio para acentos */
+    --light-bg: #F0F3FA; /* Fondo claro */
 }
 
 * {

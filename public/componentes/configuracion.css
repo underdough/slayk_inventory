@@ -1,10 +1,21 @@
-/* Estilos específicos para la página de configuración */
+/* Estilos específicos para configuración */
+:root {
+    --primary-color: #3D5DEF; /* Azul principal */
+    --secondary-color: #395886; /* Azul oscuro */
+    --tertiary-color: #638ECB; /* Azul intermedio */
+    --accent-color: #8AAEE0; /* Azul medio para acentos */
+    --border-color: #B1C9EF; /* Azul claro para bordes */
+    --light-bg: #F0F3FA; /* Fondo claro */
+    --text-color: #333333;
+    --shadow-color: rgba(61, 93, 238, 0.15);
+}
+
 body {
     height: 100vh;
     display: flex;
     margin: 0;
-    background: #f5f5f5;
-    overflow: auto;
+    background: var(--light-bg);
+    overflow: hidden;
 }
 
 .sidebar {
@@ -57,6 +68,26 @@ body {
     margin-left: 250px;
     padding: 20px;
     overflow-y: auto;
+    height: 100vh;
+    scroll-behavior: smooth;
+}
+
+.main-content::-webkit-scrollbar {
+    width: 8px;
+}
+
+.main-content::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+.main-content::-webkit-scrollbar-thumb {
+    background: var(--primary-color);
+    border-radius: 4px;
+}
+
+.main-content::-webkit-scrollbar-thumb:hover {
+    background: var(--secondary-color);
 }
 
 .header {
@@ -211,6 +242,188 @@ input:checked + .slider:before {
     justify-content: flex-end;
     margin-top: 15px;
     gap: 10px;
+}
+
+/* Estilos para secciones específicas de administrador */
+.admin-only {
+    border-left: 4px solid var(--primary-color);
+    background: linear-gradient(135deg, #f8f9ff 0%, #ffffff 100%);
+}
+
+.admin-only h3 {
+    color: var(--primary-color);
+}
+
+.admin-badge {
+    background: var(--primary-color);
+    color: white;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    margin-left: 10px;
+    font-weight: 500;
+}
+
+/* Estilos para configuraciones avanzadas */
+.advanced-config {
+    background: linear-gradient(135deg, #fff8f0 0%, #ffffff 100%);
+    border-left: 4px solid #ff9500;
+}
+
+.advanced-config h3 {
+    color: #ff9500;
+}
+
+.warning-badge {
+    background: #ff9500;
+    color: white;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    margin-left: 10px;
+    font-weight: 500;
+}
+
+/* Estilos para configuraciones de sistema */
+.system-config {
+    background: linear-gradient(135deg, #f0fff4 0%, #ffffff 100%);
+    border-left: 4px solid #28a745;
+}
+
+.system-config h3 {
+    color: #28a745;
+}
+
+.system-badge {
+    background: #28a745;
+    color: white;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    margin-left: 10px;
+    font-weight: 500;
+}
+
+/* Estilos para alertas y notificaciones */
+.alert {
+    padding: 12px 15px;
+    border-radius: 6px;
+    margin-bottom: 15px;
+    border-left: 4px solid;
+}
+
+.alert-info {
+    background-color: #e3f2fd;
+    border-color: #2196f3;
+    color: #0d47a1;
+}
+
+.alert-warning {
+    background-color: #fff3e0;
+    border-color: #ff9800;
+    color: #e65100;
+}
+
+.alert-success {
+    background-color: #e8f5e8;
+    border-color: #4caf50;
+    color: #2e7d32;
+}
+
+/* Estilos para configuraciones en tiempo real */
+.real-time-indicator {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    background: #4caf50;
+    border-radius: 50%;
+    margin-right: 8px;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.5; }
+    100% { opacity: 1; }
+}
+
+/* Estilos para configuraciones de tema */
+.theme-selector {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.theme-option {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    cursor: pointer;
+    border: 3px solid transparent;
+    transition: all 0.3s;
+    position: relative;
+}
+
+.theme-option.selected {
+    border-color: var(--primary-color);
+    transform: scale(1.1);
+}
+
+.theme-option::after {
+    content: '✓';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-weight: bold;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.theme-option.selected::after {
+    opacity: 1;
+}
+
+.theme-blue { background: linear-gradient(135deg, #3D5DEF, #638ECB); }
+.theme-green { background: linear-gradient(135deg, #4caf50, #81c784); }
+.theme-purple { background: linear-gradient(135deg, #9c27b0, #ba68c8); }
+.theme-orange { background: linear-gradient(135deg, #ff9800, #ffb74d); }
+
+/* Estilos para configuraciones de seguridad */
+.security-level {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.security-indicator {
+    width: 100px;
+    height: 6px;
+    background: #e0e0e0;
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.security-bar {
+    height: 100%;
+    transition: width 0.3s, background-color 0.3s;
+}
+
+.security-low .security-bar {
+    width: 33%;
+    background: #f44336;
+}
+
+.security-medium .security-bar {
+    width: 66%;
+    background: #ff9800;
+}
+
+.security-high .security-bar {
+    width: 100%;
+    background: #4caf50;
 }
 
 @media (max-width: 768px) {

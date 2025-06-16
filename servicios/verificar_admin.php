@@ -17,14 +17,33 @@ session_start();
  * @return bool True si es administrador, False en caso contrario
  */
 function esAdministrador() {
-    // Verificar si existe una sesión activa
-    if (!isset($_SESSION['id_usuario']) || !isset($_SESSION['rol_usuario'])) {
+   // Verificar si las variables de sesión están definidas
+    if (!isset($_SESSION['id_usuarios']) || !isset($_SESSION['rol'])) {
+        return false;
+    }
+
+    // Obtener el ID del usuario y el rol de la sesión
+    $id_usuarios = $_SESSION['id_usuarios'];
+    $rol = $_SESSION['rol'];
+
+    // Conectar a la base de datos
+    $db = new PDO('mysql:host=localhost;dbname=arco_bdd', 'usuario', 'contraseña');
+
+    // Consultar la base de datos para verificar el usuario y el rol
+    $stmt = $db->prepare("SELECT id, rol FROM usuarios WHERE id = :id");
+    $stmt->execute(['id' => $id_usuarios]);
+    $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    // Verificar si el usuario existe y el rol coincide
+    if ($user && $user['rol'] == $rol) {
+        return true;
+    } else {
+        // Si no coincide, invalidar la sesión
+        session_unset();
+        session_destroy();
         return false;
     }
     
-    // Verificar si el rol es de administrador
-    $rol = strtolower($_SESSION['rol_usuario']);
-    return in_array($rol, ['admin', 'administrador']);
 }
 
 /**
