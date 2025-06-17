@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,6 +14,7 @@
     <link rel="stylesheet" href="../public/componentes/configuracion.css">
     <link rel="stylesheet" href="../public/componentes/global.css">
 </head>
+
 <body>
     <div class="sidebar">
         <div class="sidebar-header">
@@ -54,7 +56,7 @@
             </a>
         </div>
     </div>
-    
+
     <div class="main-content">
         <div class="header">
             <h2>Configuración del Sistema</h2>
@@ -62,632 +64,732 @@
                 <i class="fas fa-save"></i> Guardar Todos los Cambios
             </button>
         </div>
-        
+
         <!-- Sección de Información de la Empresa -->
-        <div class="config-section">
-            <h3><i class="fas fa-building"></i> Información de la Empresa</h3>
-            <form id="companyInfoForm">
+        <form action="../servicios/guardar_empresa.php" method="POST" enctype="multipart/form-data"
+            id="companyInfoForm">
+            <div class="config-section">
+                <h3><i class="fas fa-building"></i> Información de la Empresa</h3>
+
                 <div class="form-row">
                     <div class="form-group">
                         <label for="companyName">Nombre de la Empresa</label>
-                        <input type="text" class="form-control" id="companyName" value="ARCO Inventarios S.A.">
+                        <input type="text" class="form-control" id="companyName" name="companyName"
+                            value="ARCO Inventarios S.A.">
                     </div>
                     <div class="form-group">
                         <label for="companyTaxId">NIF/CIF</label>
-                        <input type="text" class="form-control" id="companyTaxId" value="B12345678">
+                        <input type="text" class="form-control" id="companyTaxId" name="companyTaxId" value="B12345678">
                     </div>
                 </div>
+
                 <div class="form-row">
                     <div class="form-group">
                         <label for="companyAddress">Dirección</label>
-                        <input type="text" class="form-control" id="companyAddress" value="Calle Principal 123">
+                        <input type="text" class="form-control" id="companyAddress" name="companyAddress"
+                            value="Calle Principal 123">
                     </div>
                     <div class="form-group">
                         <label for="companyCity">Ciudad</label>
-                        <input type="text" class="form-control" id="companyCity" value="Madrid">
+                        <input type="text" class="form-control" id="companyCity" name="companyCity" value="Madrid">
                     </div>
                 </div>
+
                 <div class="form-row">
                     <div class="form-group">
                         <label for="companyPhone">Teléfono</label>
-                        <input type="text" class="form-control" id="companyPhone" value="+34 912 345 678">
+                        <input type="text" class="form-control" id="companyPhone" name="companyPhone"
+                            value="+34 912 345 678">
                     </div>
                     <div class="form-group">
                         <label for="companyEmail">Email</label>
-                        <input type="email" class="form-control" id="companyEmail" value="contacto@arcoinventarios.com">
+                        <input type="email" class="form-control" id="companyEmail" name="companyEmail"
+                            value="contacto@arcoinventarios.com">
                     </div>
                 </div>
+
                 <div class="form-group">
                     <label for="companyLogo">Logo de la Empresa</label>
-                    <input type="file" class="form-control" id="companyLogo">
+                    <input type="file" class="form-control" id="companyLogo" name="companyLogo">
                     <small>Tamaño recomendado: 200x200px. Formatos: JPG, PNG</small>
                 </div>
+
                 <div class="section-actions">
                     <button type="submit" class="btn btn-primary">
                         <i class="fas fa-save"></i> Guardar Información
                     </button>
                 </div>
-            </form>
-        </div>
-        
+            </div>
+        </form>
+
+
         <!-- Sección de Preferencias de Notificaciones -->
-        <div class="config-section">
-            <h3><i class="fas fa-bell"></i> Preferencias de Notificaciones</h3>
-            <div class="form-group">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                    <label>Notificaciones de Stock Bajo</label>
-                    <label class="switch">
-                        <input type="checkbox" id="notifyLowStock" checked>
-                        <span class="slider"></span>
-                    </label>
-                </div>
-                <div class="form-group" id="lowStockThresholdGroup">
-                    <label for="lowStockThreshold">Umbral de Stock Bajo (%)</label>
-                    <input type="number" class="form-control" id="lowStockThreshold" value="15" min="1" max="100">
-                </div>
-            </div>
-            <div class="form-group">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                    <label>Notificaciones de Movimientos</label>
-                    <label class="switch">
-                        <input type="checkbox" id="notifyMovements" checked>
-                        <span class="slider"></span>
-                    </label>
-                </div>
-            </div>
-            <div class="form-group">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                    <label>Notificaciones por Email</label>
-                    <label class="switch">
-                        <input type="checkbox" id="notifyEmail">
-                        <span class="slider"></span>
-                    </label>
-                </div>
-                <div class="form-group" id="emailNotificationsGroup" style="display: none;">
-                    <label for="notificationEmails">Emails para Notificaciones (separados por coma)</label>
-                    <input type="text" class="form-control" id="notificationEmails" placeholder="admin@ejemplo.com, gerente@ejemplo.com">
-                </div>
-            </div>
-            <div class="section-actions">
-                <button class="btn btn-primary" id="saveNotificationSettings">
-                    <i class="fas fa-save"></i> Guardar Preferencias
-                </button>
-            </div>
-        </div>
-        
-        <!-- Sección de Copias de Seguridad -->
-        <div class="config-section">
-            <h3><i class="fas fa-database"></i> Copias de Seguridad</h3>
-            <div class="form-group">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                    <label>Copias de Seguridad Automáticas</label>
-                    <label class="switch">
-                        <input type="checkbox" id="autoBackup" checked>
-                        <span class="slider"></span>
-                    </label>
-                </div>
-            </div>
-            <div class="form-group" id="backupFrequencyGroup">
-                <label for="backupFrequency">Frecuencia de Copias</label>
-                <select class="form-control" id="backupFrequency">
-                    <option value="daily">Diaria</option>
-                    <option value="weekly" selected>Semanal</option>
-                    <option value="monthly">Mensual</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="backupRetention">Retención de Copias (días)</label>
-                <input type="number" class="form-control" id="backupRetention" value="30" min="1">
-            </div>
-            <div class="form-group">
-                <label>Última Copia de Seguridad: <span id="lastBackupDate">15/06/2023 08:30</span></label>
-            </div>
-            <div class="section-actions">
-                <button class="btn btn-secondary" id="createBackupNow">
-                    <i class="fas fa-download"></i> Crear Copia Ahora
-                </button>
-                <button class="btn btn-primary" id="saveBackupSettings">
-                    <i class="fas fa-save"></i> Guardar Configuración
-                </button>
-            </div>
-        </div>
-        
-        <!-- Sección de Permisos de Usuarios -->
-        <div class="config-section admin-only" id="userPermissionsSection">
-            <h3><i class="fas fa-user-shield"></i> Permisos de Usuarios<span class="admin-badge">ADMIN</span></h3>
-            <div class="alert alert-info">
-                <i class="fas fa-info-circle"></i> Esta sección solo está disponible para administradores del sistema.
-            </div>
-            <div class="form-group">
-                <label for="userRoles">Rol de Usuario</label>
-                <select class="form-control" id="userRoles">
-                    <option value="admin">Administrador</option>
-                    <option value="manager">Gerente</option>
-                    <option value="operator">Operador</option>
-                    <option value="viewer">Visualizador</option>
-                </select>
-            </div>
-            <table class="permission-table">
-                <thead>
-                    <tr>
-                        <th>Módulo</th>
-                        <th>Ver</th>
-                        <th>Crear</th>
-                        <th>Editar</th>
-                        <th>Eliminar</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Productos</td>
-                        <td><input type="checkbox" class="perm-check" data-module="products" data-action="view" checked></td>
-                        <td><input type="checkbox" class="perm-check" data-module="products" data-action="create" checked></td>
-                        <td><input type="checkbox" class="perm-check" data-module="products" data-action="edit" checked></td>
-                        <td><input type="checkbox" class="perm-check" data-module="products" data-action="delete" checked></td>
-                    </tr>
-                    <tr>
-                        <td>Categorías</td>
-                        <td><input type="checkbox" class="perm-check" data-module="categories" data-action="view" checked></td>
-                        <td><input type="checkbox" class="perm-check" data-module="categories" data-action="create" checked></td>
-                        <td><input type="checkbox" class="perm-check" data-module="categories" data-action="edit" checked></td>
-                        <td><input type="checkbox" class="perm-check" data-module="categories" data-action="delete" checked></td>
-                    </tr>
-                    <tr>
-                        <td>Movimientos</td>
-                        <td><input type="checkbox" class="perm-check" data-module="movements" data-action="view" checked></td>
-                        <td><input type="checkbox" class="perm-check" data-module="movements" data-action="create" checked></td>
-                        <td><input type="checkbox" class="perm-check" data-module="movements" data-action="edit" checked></td>
-                        <td><input type="checkbox" class="perm-check" data-module="movements" data-action="delete" checked></td>
-                    </tr>
-                    <tr>
-                        <td>Reportes</td>
-                        <td><input type="checkbox" class="perm-check" data-module="reports" data-action="view" checked></td>
-                        <td><input type="checkbox" class="perm-check" data-module="reports" data-action="create" checked></td>
-                        <td><input type="checkbox" class="perm-check" data-module="reports" data-action="edit" checked></td>
-                        <td><input type="checkbox" class="perm-check" data-module="reports" data-action="delete" checked></td>
-                    </tr>
-                    <tr>
-                        <td>Usuarios</td>
-                        <td><input type="checkbox" class="perm-check" data-module="users" data-action="view" checked></td>
-                        <td><input type="checkbox" class="perm-check" data-module="users" data-action="create" checked></td>
-                        <td><input type="checkbox" class="perm-check" data-module="users" data-action="edit" checked></td>
-                        <td><input type="checkbox" class="perm-check" data-module="users" data-action="delete" checked></td>
-                    </tr>
-                    <tr>
-                        <td>Configuración</td>
-                        <td><input type="checkbox" class="perm-check" data-module="settings" data-action="view" checked></td>
-                        <td><input type="checkbox" class="perm-check" data-module="settings" data-action="create" disabled></td>
-                        <td><input type="checkbox" class="perm-check" data-module="settings" data-action="edit" checked></td>
-                        <td><input type="checkbox" class="perm-check" data-module="settings" data-action="delete" disabled></td>
-                    </tr>
-                </tbody>
-            </table>
-            <div class="section-actions">
-                <button class="btn btn-secondary" id="resetPermissions">
-                    <i class="fas fa-undo"></i> Restablecer
-                </button>
-                <button class="btn btn-primary" id="savePermissions">
-                    <i class="fas fa-save"></i> Guardar Permisos
-                </button>
-            </div>
-        </div>
-        
-        <!-- Sección de Configuración de Tema -->
-        <div class="config-section">
-            <h3><i class="fas fa-palette"></i> Personalización de Tema</h3>
-            <div class="form-group">
-                <label>Esquema de Colores</label>
-                <div class="theme-selector">
-                    <div class="theme-option theme-blue selected" data-theme="blue" title="Azul (Actual)"></div>
-                    <div class="theme-option theme-green" data-theme="green" title="Verde"></div>
-                    <div class="theme-option theme-purple" data-theme="purple" title="Púrpura"></div>
-                    <div class="theme-option theme-orange" data-theme="orange" title="Naranja"></div>
-                </div>
-            </div>
-            <div class="form-group">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                    <label>Modo Oscuro</label>
-                    <label class="switch">
-                        <input type="checkbox" id="darkMode">
-                        <span class="slider"></span>
-                    </label>
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="fontSize">Tamaño de Fuente</label>
-                <select class="form-control" id="fontSize">
-                    <option value="small">Pequeño</option>
-                    <option value="medium" selected>Mediano</option>
-                    <option value="large">Grande</option>
-                </select>
-            </div>
-            <div class="section-actions">
-                <button class="btn btn-primary" id="saveThemeSettings">
-                    <i class="fas fa-save"></i> Aplicar Tema
-                </button>
-            </div>
-        </div>
-        
-        <!-- Sección de Configuración de Seguridad -->
-        <div class="config-section advanced-config" id="securitySection">
-            <h3><i class="fas fa-shield-alt"></i> Configuración de Seguridad<span class="warning-badge">AVANZADO</span></h3>
-            <div class="alert alert-warning">
-                <i class="fas fa-exclamation-triangle"></i> Cambiar estas configuraciones puede afectar la seguridad del sistema.
-            </div>
-            <div class="form-group">
-                <label for="sessionTimeout">Tiempo de Sesión (minutos)</label>
-                <input type="number" class="form-control" id="sessionTimeout" value="30" min="5" max="480">
-            </div>
-            <div class="form-group">
-                <label for="passwordPolicy">Política de Contraseñas</label>
-                <select class="form-control" id="passwordPolicy">
-                    <option value="basic">Básica (6+ caracteres)</option>
-                    <option value="medium" selected>Media (8+ caracteres, números)</option>
-                    <option value="strong">Fuerte (12+ caracteres, números, símbolos)</option>
-                </select>
-                <div class="security-level security-medium" id="securityLevel">
-                    <span>Nivel de seguridad:</span>
-                    <div class="security-indicator">
-                        <div class="security-bar"></div>
+        <form action="../servicios/guardar_notificaciones.php" method="POST" id="formNotificaciones">
+            <div class="config-section" id="notificacionesSection">
+                <h3><i class="fas fa-bell"></i> Preferencias de Notificaciones</h3>
+
+                <div class="form-group">
+                    <div
+                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                        <label>Notificaciones de Stock Bajo</label>
+                        <label class="switch">
+                            <input type="checkbox" id="notifyLowStock" name="notifyLowStock" value="1" checked>
+                            <span class="slider"></span>
+                        </label>
                     </div>
-                    <span id="securityText">Medio</span>
-                </div>
-            </div>
-            <div class="form-group">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                    <label>Autenticación de Dos Factores</label>
-                    <label class="switch">
-                        <input type="checkbox" id="twoFactorAuth">
-                        <span class="slider"></span>
-                    </label>
-                </div>
-            </div>
-            <div class="form-group">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                    <label>Registro de Actividad</label>
-                    <label class="switch">
-                        <input type="checkbox" id="activityLogging" checked>
-                        <span class="slider"></span>
-                    </label>
-                </div>
-            </div>
-            <div class="section-actions">
-                <button class="btn btn-primary" id="saveSecuritySettings">
-                    <i class="fas fa-save"></i> Guardar Seguridad
-                </button>
-            </div>
-        </div>
-        
-        <!-- Sección de Configuración del Sistema -->
-        <div class="config-section system-config" id="systemSection">
-            <h3><i class="fas fa-server"></i> Configuración del Sistema<span class="system-badge">SISTEMA</span></h3>
-            <div class="form-group">
-                <label>Estado del Sistema <span class="real-time-indicator"></span></label>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 10px;">
-                    <div style="background: #f8f9fa; padding: 10px; border-radius: 6px;">
-                        <strong>CPU:</strong> <span id="cpuUsage">45%</span>
-                    </div>
-                    <div style="background: #f8f9fa; padding: 10px; border-radius: 6px;">
-                        <strong>Memoria:</strong> <span id="memoryUsage">62%</span>
-                    </div>
-                    <div style="background: #f8f9fa; padding: 10px; border-radius: 6px;">
-                        <strong>Disco:</strong> <span id="diskUsage">78%</span>
-                    </div>
-                    <div style="background: #f8f9fa; padding: 10px; border-radius: 6px;">
-                        <strong>Uptime:</strong> <span id="systemUptime">15d 8h 32m</span>
+                    <div class="form-group" id="lowStockThresholdGroup">
+                        <label for="lowStockThreshold">Umbral de Stock Bajo (%)</label>
+                        <input type="number" class="form-control" id="lowStockThreshold" name="lowStockThreshold"
+                            value="15" min="1" max="100">
                     </div>
                 </div>
-            </div>
-            <div class="form-group">
-                <label for="maxUsers">Máximo de Usuarios Concurrentes</label>
-                <input type="number" class="form-control" id="maxUsers" value="50" min="1" max="1000">
-            </div>
-            <div class="form-group">
-                <label for="cacheSize">Tamaño de Caché (MB)</label>
-                <input type="number" class="form-control" id="cacheSize" value="256" min="64" max="2048">
-            </div>
-            <div class="form-group">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                    <label>Modo de Mantenimiento</label>
-                    <label class="switch">
-                        <input type="checkbox" id="maintenanceMode">
-                        <span class="slider"></span>
-                    </label>
+
+                <div class="form-group">
+                    <div
+                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                        <label>Notificaciones de Movimientos</label>
+                        <label class="switch">
+                            <input type="checkbox" id="notifyMovements" name="notifyMovements" value="1" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
                 </div>
-            </div>
-            <div class="section-actions">
-                <button class="btn btn-secondary" id="clearCache">
-                    <i class="fas fa-broom"></i> Limpiar Caché
-                </button>
-                <button class="btn btn-primary" id="saveSystemSettings">
-                    <i class="fas fa-save"></i> Guardar Sistema
-                </button>
-            </div>
-        </div>
-        
-        <!-- Sección de Configuración de API -->
-        <div class="config-section advanced-config" id="apiSection">
-            <h3><i class="fas fa-code"></i> Configuración de API<span class="warning-badge">AVANZADO</span></h3>
-            <div class="form-group">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                    <label>API Habilitada</label>
-                    <label class="switch">
-                        <input type="checkbox" id="apiEnabled" checked>
-                        <span class="slider"></span>
-                    </label>
+
+                <div class="form-group">
+                    <div
+                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                        <label>Notificaciones por Email</label>
+                        <label class="switch">
+                            <input type="checkbox" id="notifyEmail" name="notifyEmail" value="1">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <div class="form-group" id="emailNotificationsGroup" style="display: none;">
+                        <label for="notificationEmails">Emails para Notificaciones (separados por coma)</label>
+                        <input type="text" class="form-control" id="notificationEmails" name="notificationEmails"
+                            placeholder="admin@ejemplo.com, gerente@ejemplo.com">
+                    </div>
                 </div>
-            </div>
-            <div class="form-group">
-                <label for="apiKey">Clave de API</label>
-                <div style="display: flex; gap: 10px;">
-                    <input type="password" class="form-control" id="apiKey" value="sk-1234567890abcdef" readonly>
-                    <button class="btn btn-secondary" id="regenerateApiKey">
-                        <i class="fas fa-sync"></i> Regenerar
+
+                <div class="section-actions">
+                    <button class="btn btn-primary" type="submit" id="saveNotificationSettings">
+                        <i class="fas fa-save"></i> Guardar Preferencias
                     </button>
                 </div>
             </div>
-            <div class="form-group">
-                <label for="apiRateLimit">Límite de Peticiones (por minuto)</label>
-                <input type="number" class="form-control" id="apiRateLimit" value="100" min="10" max="1000">
-            </div>
-            <div class="form-group">
-                <label>Endpoints Disponibles:</label>
-                <div style="margin-top: 10px;">
-                    <div><input type="checkbox" checked> <code>/api/productos</code> - Gestión de productos</div>
-                    <div><input type="checkbox" checked> <code>/api/categorias</code> - Gestión de categorías</div>
-                    <div><input type="checkbox" checked> <code>/api/movimientos</code> - Gestión de movimientos</div>
-                    <div><input type="checkbox"> <code>/api/usuarios</code> - Gestión de usuarios (Admin)</div>
+        </form>
+
+
+        <!-- Sección de Copias de Seguridad -->
+        <form action="../servicios/guardar_copias.php" method="POST" id="formBackup">
+            <div class="config-section">
+                <h3><i class="fas fa-database"></i> Copias de Seguridad</h3>
+
+                <div class="form-group">
+                    <div
+                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                        <label>Activar Copias Automáticas</label>
+                        <label class="switch">
+                            <input type="checkbox" id="autoBackup" name="autoBackup" value="1">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group" id="backupFrequencyGroup" style="display: none;">
+                    <label for="backupFrequency">Frecuencia de Copias</label>
+                    <select class="form-control" id="backupFrequency" name="backupFrequency">
+                        <option value="diaria">Diaria</option>
+                        <option value="semanal">Semanal</option>
+                        <option value="mensual">Mensual</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="backupRetention">Días de Retención</label>
+                    <input type="number" class="form-control" id="backupRetention" name="backupRetention" value="30"
+                        min="1">
+                </div>
+
+                <div class="form-group">
+                    <label>Última copia de seguridad:</label>
+                    <p id="lastBackupDate">No disponible</p>
+                </div>
+
+                <div class="section-actions">
+                    <button type="submit" class="btn btn-primary" id="saveBackupSettings">
+                        <i class="fas fa-save"></i> Guardar Configuración
+                    </button>
+                    <button type="button" class="btn btn-secondary" id="createBackupNow">
+                        <i class="fas fa-download"></i> Crear Copia Ahora
+                    </button>
                 </div>
             </div>
-            <div class="section-actions">
-                <button class="btn btn-primary" id="saveApiSettings">
-                    <i class="fas fa-save"></i> Guardar API
+        </form>
+
+
+        <!-- Sección de Permisos de Usuario -->
+        <form action="../servicios/guardar_permisos.php" method="POST" id="formPermisos">
+            <div class="config-section" id="userPermissionsSection">
+                <h3><i class="fas fa-user-shield"></i> Permisos de Usuario</h3>
+
+                <div class="form-group">
+                    <label for="userRoles">Rol del Usuario</label>
+                    <select class="form-control" id="userRoles" name="userRole">
+                        <option value="admin">Administrador</option>
+                        <option value="manager">Gerente</option>
+                        <option value="operator">Operador</option>
+                        <option value="viewer">Visualizador</option>
+                    </select>
+                </div>
+
+                <table class="permissions-table">
+                    <thead>
+                        <tr>
+                            <th>Módulo</th>
+                            <th>Ver</th>
+                            <th>Crear</th>
+                            <th>Editar</th>
+                            <th>Eliminar</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Cada fila representa un módulo -->
+                        <tr>
+                            <td>Productos</td>
+                            <td><input type="checkbox" name="permisos[productos][ver]" class="perm-check"
+                                    data-module="products" data-action="view"></td>
+                            <td><input type="checkbox" name="permisos[productos][crear]" class="perm-check"
+                                    data-module="products" data-action="create"></td>
+                            <td><input type="checkbox" name="permisos[productos][editar]" class="perm-check"
+                                    data-module="products" data-action="edit"></td>
+                            <td><input type="checkbox" name="permisos[productos][eliminar]" class="perm-check"
+                                    data-module="products" data-action="delete"></td>
+                        </tr>
+                        <tr>
+                            <td>Categorías</td>
+                            <td><input type="checkbox" name="permisos[categorias][ver]" class="perm-check"
+                                    data-module="categories" data-action="view"></td>
+                            <td><input type="checkbox" name="permisos[categorias][crear]" class="perm-check"
+                                    data-module="categories" data-action="create"></td>
+                            <td><input type="checkbox" name="permisos[categorias][editar]" class="perm-check"
+                                    data-module="categories" data-action="edit"></td>
+                            <td><input type="checkbox" name="permisos[categorias][eliminar]" class="perm-check"
+                                    data-module="categories" data-action="delete"></td>
+                        </tr>
+                        <tr>
+                            <td>Movimientos</td>
+                            <td><input type="checkbox" name="permisos[movimientos][ver]" class="perm-check"
+                                    data-module="movements" data-action="view"></td>
+                            <td><input type="checkbox" name="permisos[movimientos][crear]" class="perm-check"
+                                    data-module="movements" data-action="create"></td>
+                            <td><input type="checkbox" name="permisos[movimientos][editar]" class="perm-check"
+                                    data-module="movements" data-action="edit"></td>
+                            <td><input type="checkbox" name="permisos[movimientos][eliminar]" class="perm-check"
+                                    data-module="movements" data-action="delete"></td>
+                        </tr>
+                        <tr>
+                            <td>Reportes</td>
+                            <td><input type="checkbox" name="permisos[reportes][ver]" class="perm-check"
+                                    data-module="reports" data-action="view"></td>
+                            <td><input type="checkbox" name="permisos[reportes][crear]" class="perm-check"
+                                    data-module="reports" data-action="create"></td>
+                            <td><input type="checkbox" name="permisos[reportes][editar]" class="perm-check"
+                                    data-module="reports" data-action="edit"></td>
+                            <td><input type="checkbox" name="permisos[reportes][eliminar]" class="perm-check"
+                                    data-module="reports" data-action="delete"></td>
+                        </tr>
+                        <tr>
+                            <td>Usuarios</td>
+                            <td><input type="checkbox" name="permisos[usuarios][ver]" class="perm-check"
+                                    data-module="users" data-action="view"></td>
+                            <td><input type="checkbox" name="permisos[usuarios][crear]" class="perm-check"
+                                    data-module="users" data-action="create"></td>
+                            <td><input type="checkbox" name="permisos[usuarios][editar]" class="perm-check"
+                                    data-module="users" data-action="edit"></td>
+                            <td><input type="checkbox" name="permisos[usuarios][eliminar]" class="perm-check"
+                                    data-module="users" data-action="delete"></td>
+                        </tr>
+                        <tr>
+                            <td>Configuración</td>
+                            <td><input type="checkbox" name="permisos[configuracion][ver]" class="perm-check"
+                                    data-module="settings" data-action="view"></td>
+                            <td><input type="checkbox" name="permisos[configuracion][crear]" class="perm-check"
+                                    data-module="settings" data-action="create"></td>
+                            <td><input type="checkbox" name="permisos[configuracion][editar]" class="perm-check"
+                                    data-module="settings" data-action="edit"></td>
+                            <td><input type="checkbox" name="permisos[configuracion][eliminar]" class="perm-check"
+                                    data-module="settings" data-action="delete"></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="section-actions">
+                    <button type="button" class="btn btn-secondary" id="resetPermissions">
+                        <i class="fas fa-undo"></i> Restablecer
+                    </button>
+                    <button type="submit" class="btn btn-primary" id="savePermissions">
+                        <i class="fas fa-save"></i> Guardar Permisos
+                    </button>
+                </div>
+            </div>
+        </form>
+
+
+        <!-- Sección de Tema del Sistema -->
+        <form action="../servicios/guardar_tema.php" method="POST" id="formTema">
+            <div class="config-section">
+                <h3><i class="fas fa-paint-brush"></i> Personalización del Tema</h3>
+
+                <div class="form-group">
+                    <label>Color del Tema</label>
+                    <div class="theme-options">
+                        <div class="theme-option" data-theme="blue">
+                            <input type="radio" name="temaColor" value="blue" checked>
+                            <span class="color-preview" style="background-color: #3D5DEF;"></span> Azul
+                        </div>
+                        <div class="theme-option" data-theme="green">
+                            <input type="radio" name="temaColor" value="green">
+                            <span class="color-preview" style="background-color: #4CAF50;"></span> Verde
+                        </div>
+                        <div class="theme-option" data-theme="purple">
+                            <input type="radio" name="temaColor" value="purple">
+                            <span class="color-preview" style="background-color: #9C27B0;"></span> Morado
+                        </div>
+                        <div class="theme-option" data-theme="orange">
+                            <input type="radio" name="temaColor" value="orange">
+                            <span class="color-preview" style="background-color: #FF9800;"></span> Naranja
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="darkMode">Modo Oscuro</label>
+                    <label class="switch">
+                        <input type="checkbox" id="darkMode" name="modoOscuro" value="1">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <div class="form-group">
+                    <label for="fontSize">Tamaño de Fuente</label>
+                    <select class="form-control" id="fontSize" name="tamanoFuente">
+                        <option value="small">Pequeño</option>
+                        <option value="medium" selected>Mediano</option>
+                        <option value="large">Grande</option>
+                    </select>
+                </div>
+
+                <div class="section-actions">
+                    <button type="submit" class="btn btn-primary" id="saveThemeSettings">
+                        <i class="fas fa-save"></i> Guardar Configuración de Tema
+                    </button>
+                </div>
+            </div>
+        </form>
+
+
+        <!-- Sección de Seguridad del Sistema -->
+        <form action="../servicios/guardar_seguridad.php" method="POST" id="formSeguridad">
+            <div class="config-section" id="securitySection">
+                <h3><i class="fas fa-shield-alt"></i> Seguridad del Sistema</h3>
+
+                <div class="form-group">
+                    <label for="passwordPolicy">Política de Contraseñas</label>
+                    <select class="form-control" id="passwordPolicy" name="politicaContrasena">
+                        <option value="basic">Básica (mínimo 6 caracteres)</option>
+                        <option value="medium">Media (mínimo 8 con letras y números)</option>
+                        <option value="strong">Fuerte (mínimo 10 con letras, números y símbolos)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="securityLevel">Nivel de Seguridad Actual:</label>
+                    <div id="securityLevel" class="security-level security-basic"></div>
+                    <p id="securityText">Bajo</p>
+                </div>
+
+                <div class="form-group">
+                    <label>Modo de Mantenimiento</label>
+                    <label class="switch">
+                        <input type="checkbox" id="maintenanceMode" name="modoMantenimiento" value="1">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <div class="section-actions">
+                    <button type="submit" class="btn btn-primary" id="saveSecuritySettings">
+                        <i class="fas fa-save"></i> Guardar Configuración de Seguridad
+                    </button>
+                    <button type="button" class="btn btn-secondary" id="clearCache">
+                        <i class="fas fa-broom"></i> Limpiar Caché
+                    </button>
+                </div>
+            </div>
+        </form>
+
+        <!-- Sección de Configuración del Sistema -->
+        <form action="../servicios/guardar_configuracion_sistema.php" method="POST" id="formConfiguracionSistema">
+            <div class="config-section system-config" id="systemSection">
+                <h3><i class="fas fa-server"></i> Configuración del Sistema <span class="system-badge">SISTEMA</span>
+                </h3>
+
+                <div class="form-group">
+                    <label>Estado del Sistema <span class="real-time-indicator"></span></label>
+                    <div
+                        style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 10px;">
+                        <div style="background: #f8f9fa; padding: 10px; border-radius: 6px;">
+                            <strong>CPU:</strong> <span id="cpuUsage">45%</span>
+                        </div>
+                        <div style="background: #f8f9fa; padding: 10px; border-radius: 6px;">
+                            <strong>Memoria:</strong> <span id="memoryUsage">62%</span>
+                        </div>
+                        <div style="background: #f8f9fa; padding: 10px; border-radius: 6px;">
+                            <strong>Disco:</strong> <span id="diskUsage">78%</span>
+                        </div>
+                        <div style="background: #f8f9fa; padding: 10px; border-radius: 6px;">
+                            <strong>Uptime:</strong> <span id="systemUptime">15d 8h 32m</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="maxUsers">Máximo de Usuarios Concurrentes</label>
+                    <input type="number" class="form-control" id="maxUsers" name="maxUsers" value="50" min="1"
+                        max="1000">
+                </div>
+
+                <div class="form-group">
+                    <label for="cacheSize">Tamaño de Caché (MB)</label>
+                    <input type="number" class="form-control" id="cacheSize" name="cacheSize" value="256" min="64"
+                        max="2048">
+                </div>
+
+                <div class="form-group">
+                    <div
+                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                        <label>Modo de Mantenimiento</label>
+                        <label class="switch">
+                            <input type="checkbox" id="maintenanceMode" name="maintenanceMode" value="1">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="section-actions">
+                    <button type="button" class="btn btn-secondary" id="clearCache">
+                        <i class="fas fa-broom"></i> Limpiar Caché
+                    </button>
+                    <button type="submit" class="btn btn-primary" id="saveSystemSettings">
+                        <i class="fas fa-save"></i> Guardar Sistema
+                    </button>
+                </div>
+            </div>
+        </form>
+
+
+        <!-- Sección de Configuración de API -->
+<form action="../servicios/guardar_api.php" method="POST" id="formApiConfig">
+    <div class="config-section advanced-config" id="apiSection">
+        <h3><i class="fas fa-code"></i> Configuración de API <span class="warning-badge">AVANZADO</span></h3>
+
+        <div class="form-group">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                <label>API Habilitada</label>
+                <label class="switch">
+                    <input type="checkbox" id="apiEnabled" name="apiEnabled" value="1" checked>
+                    <span class="slider"></span>
+                </label>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="apiKey">Clave de API</label>
+            <div style="display: flex; gap: 10px;">
+                <input type="password" class="form-control" id="apiKey" name="apiKey" value="sk-1234567890abcdef" readonly>
+                <button type="button" class="btn btn-secondary" id="regenerateApiKey">
+                    <i class="fas fa-sync"></i> Regenerar
                 </button>
             </div>
         </div>
+
+        <div class="form-group">
+            <label for="apiRateLimit">Límite de Peticiones (por minuto)</label>
+            <input type="number" class="form-control" id="apiRateLimit" name="apiRateLimit" value="100" min="10" max="1000">
+        </div>
+
+        <div class="form-group">
+            <label>Endpoints Disponibles:</label>
+            <div style="margin-top: 10px;">
+                <div>
+                    <input type="checkbox" name="endpoints[]" value="productos" checked>
+                    <code>/api/productos</code> - Gestión de productos
+                </div>
+                <div>
+                    <input type="checkbox" name="endpoints[]" value="categorias" checked>
+                    <code>/api/categorias</code> - Gestión de categorías
+                </div>
+                <div>
+                    <input type="checkbox" name="endpoints[]" value="movimientos" checked>
+                    <code>/api/movimientos</code> - Gestión de movimientos
+                </div>
+                <div>
+                    <input type="checkbox" name="endpoints[]" value="usuarios">
+                    <code>/api/usuarios</code> - Gestión de usuarios (Admin)
+                </div>
+            </div>
+        </div>
+
+        <div class="section-actions">
+            <button type="submit" class="btn btn-primary" id="saveApiSettings">
+                <i class="fas fa-save"></i> Guardar API
+            </button>
+        </div>
     </div>
-    
+</form>
+
+
     <script>
         // JavaScript para funcionalidad interactiva
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             // Manejar formulario de información de empresa
-            document.getElementById('companyInfoForm').addEventListener('submit', function(e) {
+            document.getElementById('companyInfoForm').addEventListener('submit', function (e) {
                 e.preventDefault();
                 alert('Información de la empresa guardada correctamente');
             });
-        
-        // Verificar rol del usuario y configurar acceso a secciones
-        async function checkUserRoleAndConfigureAccess() {
-            try {
-                const response = await fetch('../servicios/verificar_sesion.php');
-                const data = await response.json();
-                
-                if (data.success && data.usuario) {
-                    const userRole = data.usuario.rol_usuario;
-                    const isAdmin = data.usuario.es_admin;
-                    
-                    // Configurar acceso basado en el rol
-                    configureAccessByRole(userRole, isAdmin);
-                    
-                    // Mostrar información del usuario en el header
-                    updateUserInfo(data.usuario);
-                } else {
-                    // Redirigir al login si no hay sesión válida
-                    window.location.href = '../login.html';
+
+            // Verificar rol del usuario y configurar acceso a secciones
+            async function checkUserRoleAndConfigureAccess() {
+                try {
+                    const response = await fetch('../servicios/verificar_sesion.php');
+                    const data = await response.json();
+
+                    if (data.success && data.usuario) {
+                        const userRole = data.usuario.rol_usuario;
+                        const isAdmin = data.usuario.es_admin;
+
+                        // Configurar acceso basado en el rol
+                        configureAccessByRole(userRole, isAdmin);
+
+                        // Mostrar información del usuario en el header
+                        updateUserInfo(data.usuario);
+                    } else {
+                        // Redirigir al login si no hay sesión válida
+                        window.location.href = '../login.html';
+                    }
+                } catch (error) {
+                    console.error('Error al verificar sesión:', error);
+                    showNotification('Error al verificar permisos de usuario', 'warning');
                 }
-            } catch (error) {
-                console.error('Error al verificar sesión:', error);
-                showNotification('Error al verificar permisos de usuario', 'warning');
             }
-        }
-        
-        function configureAccessByRole(role, isAdmin) {
-            // Secciones que requieren permisos de administrador
-            const adminSections = [
-                'userPermissionsSection',
-                'securitySection',
-                'systemSection',
-                'apiSection'
-            ];
-            
-            // Secciones avanzadas (para gerentes y administradores)
-            const advancedSections = [
-                'securitySection',
-                'apiSection'
-            ];
-            
-            if (!isAdmin) {
-                // Ocultar secciones de administrador para usuarios no admin
-                adminSections.forEach(sectionId => {
-                    const section = document.getElementById(sectionId);
-                    if (section && (sectionId === 'userPermissionsSection' || sectionId === 'systemSection')) {
-                        section.style.display = 'none';
-                    }
-                });
-                
-                // Mostrar alerta informativa
-                showRoleBasedAlert(role);
-            }
-            
-            // Configurar acceso según el rol específico
-            switch(role.toLowerCase()) {
-                case 'administrador':
-                    // Los administradores tienen acceso completo
-                    break;
-                    
-                case 'gerente':
-                    // Los gerentes pueden ver configuraciones avanzadas pero no de sistema
-                    const systemSection = document.getElementById('systemSection');
-                    if (systemSection) {
-                        systemSection.style.display = 'none';
-                    }
-                    break;
-                    
-                case 'operador':
-                    // Los operadores solo pueden ver configuraciones básicas
-                    advancedSections.forEach(sectionId => {
+
+            function configureAccessByRole(role, isAdmin) {
+                // Secciones que requieren permisos de administrador
+                const adminSections = [
+                    'userPermissionsSection',
+                    'securitySection',
+                    'systemSection',
+                    'apiSection'
+                ];
+
+                // Secciones avanzadas (para gerentes y administradores)
+                const advancedSections = [
+                    'securitySection',
+                    'apiSection'
+                ];
+
+                if (!isAdmin) {
+                    // Ocultar secciones de administrador para usuarios no admin
+                    adminSections.forEach(sectionId => {
                         const section = document.getElementById(sectionId);
-                        if (section) {
+                        if (section && (sectionId === 'userPermissionsSection' || sectionId === 'systemSection')) {
                             section.style.display = 'none';
                         }
                     });
-                    break;
-                    
-                case 'visualizador':
-                    // Los visualizadores solo pueden ver, no modificar
-                    disableAllInputs();
-                    showReadOnlyAlert();
-                    break;
+
+                    // Mostrar alerta informativa
+                    showRoleBasedAlert(role);
+                }
+
+                // Configurar acceso según el rol específico
+                switch (role.toLowerCase()) {
+                    case 'administrador':
+                        // Los administradores tienen acceso completo
+                        break;
+
+                    case 'gerente':
+                        // Los gerentes pueden ver configuraciones avanzadas pero no de sistema
+                        const systemSection = document.getElementById('systemSection');
+                        if (systemSection) {
+                            systemSection.style.display = 'none';
+                        }
+                        break;
+
+                    case 'operador':
+                        // Los operadores solo pueden ver configuraciones básicas
+                        advancedSections.forEach(sectionId => {
+                            const section = document.getElementById(sectionId);
+                            if (section) {
+                                section.style.display = 'none';
+                            }
+                        });
+                        break;
+
+                    case 'visualizador':
+                        // Los visualizadores solo pueden ver, no modificar
+                        disableAllInputs();
+                        showReadOnlyAlert();
+                        break;
+                }
             }
-        }
-        
-        function showRoleBasedAlert(role) {
-            const alertDiv = document.createElement('div');
-            alertDiv.className = 'alert alert-info';
-            alertDiv.style.marginBottom = '20px';
-            alertDiv.innerHTML = `
+
+            function showRoleBasedAlert(role) {
+                const alertDiv = document.createElement('div');
+                alertDiv.className = 'alert alert-info';
+                alertDiv.style.marginBottom = '20px';
+                alertDiv.innerHTML = `
                 <i class="fas fa-info-circle"></i> 
                 <strong>Acceso limitado:</strong> Tu rol de "${role}" tiene acceso restringido a ciertas configuraciones del sistema.
             `;
-            
-            const mainContent = document.querySelector('.main-content');
-            const header = document.querySelector('.header');
-            mainContent.insertBefore(alertDiv, header.nextSibling);
-        }
-        
-        function showReadOnlyAlert() {
-            const alertDiv = document.createElement('div');
-            alertDiv.className = 'alert alert-warning';
-            alertDiv.style.marginBottom = '20px';
-            alertDiv.innerHTML = `
+
+                const mainContent = document.querySelector('.main-content');
+                const header = document.querySelector('.header');
+                mainContent.insertBefore(alertDiv, header.nextSibling);
+            }
+
+            function showReadOnlyAlert() {
+                const alertDiv = document.createElement('div');
+                alertDiv.className = 'alert alert-warning';
+                alertDiv.style.marginBottom = '20px';
+                alertDiv.innerHTML = `
                 <i class="fas fa-eye"></i> 
                 <strong>Modo solo lectura:</strong> Tu rol de visualizador no permite modificar configuraciones.
             `;
-            
-            const mainContent = document.querySelector('.main-content');
-            const header = document.querySelector('.header');
-            mainContent.insertBefore(alertDiv, header.nextSibling);
-        }
-        
-        function disableAllInputs() {
-            // Deshabilitar todos los inputs, selects y botones
-            const inputs = document.querySelectorAll('input, select, button');
-            inputs.forEach(input => {
-                if (!input.closest('.alert')) {
-                    input.disabled = true;
-                }
-            });
-            
-            // Cambiar el texto de los botones
-            const buttons = document.querySelectorAll('.btn');
-            buttons.forEach(button => {
-                if (button.textContent.includes('Guardar') || button.textContent.includes('Aplicar')) {
-                    button.innerHTML = '<i class="fas fa-eye"></i> Solo Lectura';
-                }
-            });
-        }
-        
-        function updateUserInfo(usuario) {
-            // Actualizar información del usuario en el header
-            const header = document.querySelector('.header h2');
-            if (header) {
-                header.innerHTML = `
+
+                const mainContent = document.querySelector('.main-content');
+                const header = document.querySelector('.header');
+                mainContent.insertBefore(alertDiv, header.nextSibling);
+            }
+
+            function disableAllInputs() {
+                // Deshabilitar todos los inputs, selects y botones
+                const inputs = document.querySelectorAll('input, select, button');
+                inputs.forEach(input => {
+                    if (!input.closest('.alert')) {
+                        input.disabled = true;
+                    }
+                });
+
+                // Cambiar el texto de los botones
+                const buttons = document.querySelectorAll('.btn');
+                buttons.forEach(button => {
+                    if (button.textContent.includes('Guardar') || button.textContent.includes('Aplicar')) {
+                        button.innerHTML = '<i class="fas fa-eye"></i> Solo Lectura';
+                    }
+                });
+            }
+
+            function updateUserInfo(usuario) {
+                // Actualizar información del usuario en el header
+                const header = document.querySelector('.header h2');
+                if (header) {
+                    header.innerHTML = `
                     Configuración del Sistema 
                     <small style="font-size: 0.6em; color: #666; margin-left: 10px;">
                         Usuario: ${usuario.nombre_usuario} (${usuario.rol_usuario})
                     </small>
                 `;
-            }
-        }
-        
-        // Función mejorada para mostrar notificaciones con roles
-        function showNotificationWithRole(message, type = 'info', requiresAdmin = false) {
-            if (requiresAdmin && !window.currentUser?.es_admin) {
-                showNotification('Esta acción requiere permisos de administrador', 'warning');
-                return false;
-            }
-            
-            showNotification(message, type);
-            return true;
-        }
-        
-        // Sobrescribir los event listeners de guardar para verificar permisos
-        function setupSecureEventListeners() {
-            // Guardar configuración de empresa
-            document.getElementById('companyInfoForm').addEventListener('submit', function(e) {
-                e.preventDefault();
-                if (showNotificationWithRole('Información de la empresa guardada correctamente', 'success', false)) {
-                    // Aquí iría la lógica para guardar en el servidor
                 }
-            });
-            
-            // Guardar configuración de seguridad (solo admin)
-            document.getElementById('saveSecuritySettings').addEventListener('click', function() {
-                showNotificationWithRole('Configuración de seguridad guardada', 'success', true);
-            });
-            
-            // Guardar configuración del sistema (solo admin)
-            document.getElementById('saveSystemSettings').addEventListener('click', function() {
-                showNotificationWithRole('Configuración del sistema guardada', 'success', true);
-            });
-            
-            // Guardar configuración de API (solo admin/gerente)
-            document.getElementById('saveApiSettings').addEventListener('click', function() {
-                showNotificationWithRole('Configuración de API guardada', 'success', false);
-            });
-        }
-        
-        // Inicializar la verificación de roles al cargar la página
-        checkUserRoleAndConfigureAccess();
-        setupSecureEventListeners();
-            
+            }
+
+            // Función mejorada para mostrar notificaciones con roles
+            function showNotificationWithRole(message, type = 'info', requiresAdmin = false) {
+                if (requiresAdmin && !window.currentUser?.es_admin) {
+                    showNotification('Esta acción requiere permisos de administrador', 'warning');
+                    return false;
+                }
+
+                showNotification(message, type);
+                return true;
+            }
+
+            // Sobrescribir los event listeners de guardar para verificar permisos
+            function setupSecureEventListeners() {
+                // Guardar configuración de empresa
+                document.getElementById('companyInfoForm').addEventListener('submit', function (e) {
+                    e.preventDefault();
+                    if (showNotificationWithRole('Información de la empresa guardada correctamente', 'success', false)) {
+                        // Aquí iría la lógica para guardar en el servidor
+                    }
+                });
+
+                // Guardar configuración de seguridad (solo admin)
+                document.getElementById('saveSecuritySettings').addEventListener('click', function () {
+                    showNotificationWithRole('Configuración de seguridad guardada', 'success', true);
+                });
+
+                // Guardar configuración del sistema (solo admin)
+                document.getElementById('saveSystemSettings').addEventListener('click', function () {
+                    showNotificationWithRole('Configuración del sistema guardada', 'success', true);
+                });
+
+                // Guardar configuración de API (solo admin/gerente)
+                document.getElementById('saveApiSettings').addEventListener('click', function () {
+                    showNotificationWithRole('Configuración de API guardada', 'success', false);
+                });
+            }
+
+            // Inicializar la verificación de roles al cargar la página
+            checkUserRoleAndConfigureAccess();
+            setupSecureEventListeners();
+
             // Manejar notificaciones por email
             const notifyEmail = document.getElementById('notifyEmail');
             const emailNotificationsGroup = document.getElementById('emailNotificationsGroup');
-            
-            notifyEmail.addEventListener('change', function() {
+
+            notifyEmail.addEventListener('change', function () {
                 emailNotificationsGroup.style.display = this.checked ? 'block' : 'none';
             });
-            
+
             // Manejar notificaciones de stock bajo
             const notifyLowStock = document.getElementById('notifyLowStock');
             const lowStockThresholdGroup = document.getElementById('lowStockThresholdGroup');
-            
-            notifyLowStock.addEventListener('change', function() {
+
+            notifyLowStock.addEventListener('change', function () {
                 lowStockThresholdGroup.style.display = this.checked ? 'block' : 'none';
             });
-            
+
             // Manejar copias de seguridad automáticas
             const autoBackup = document.getElementById('autoBackup');
             const backupFrequencyGroup = document.getElementById('backupFrequencyGroup');
-            
-            autoBackup.addEventListener('change', function() {
+
+            autoBackup.addEventListener('change', function () {
                 backupFrequencyGroup.style.display = this.checked ? 'block' : 'none';
             });
-            
+
             // Manejar botón de crear copia ahora
-            document.getElementById('createBackupNow').addEventListener('click', function() {
+            document.getElementById('createBackupNow').addEventListener('click', function () {
                 alert('Creando copia de seguridad...');
-                setTimeout(function() {
+                setTimeout(function () {
                     const now = new Date();
-                    const formattedDate = now.toLocaleDateString() + ' ' + now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                    const formattedDate = now.toLocaleDateString() + ' ' + now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
                     document.getElementById('lastBackupDate').textContent = formattedDate;
                     alert('Copia de seguridad creada correctamente');
                 }, 1500);
             });
-            
+
             // Manejar cambios en roles de usuario
-            document.getElementById('userRoles').addEventListener('change', function() {
+            document.getElementById('userRoles').addEventListener('change', function () {
                 const role = this.value;
                 const permChecks = document.querySelectorAll('.perm-check');
-                
+
                 // Restablecer todos los checkboxes
                 permChecks.forEach(check => {
                     check.checked = false;
                 });
-                
+
                 // Configurar permisos según el rol seleccionado
-                switch(role) {
+                switch (role) {
                     case 'admin':
                         permChecks.forEach(check => {
                             if (!check.disabled) check.checked = true;
@@ -697,7 +799,7 @@
                         permChecks.forEach(check => {
                             const module = check.dataset.module;
                             const action = check.dataset.action;
-                            
+
                             // Los gerentes pueden ver todo y editar casi todo
                             if (action === 'view') check.checked = true;
                             if (action === 'create' && module !== 'users' && module !== 'settings') check.checked = true;
@@ -709,10 +811,10 @@
                         permChecks.forEach(check => {
                             const module = check.dataset.module;
                             const action = check.dataset.action;
-                            
+
                             // Los operadores pueden ver todo y editar productos y movimientos
                             if (action === 'view') check.checked = true;
-                            if ((action === 'create' || action === 'edit') && 
+                            if ((action === 'create' || action === 'edit') &&
                                 (module === 'products' || module === 'movements')) check.checked = true;
                         });
                         break;
@@ -725,98 +827,98 @@
                         break;
                 }
             });
-            
+
             // Manejar botón de restablecer permisos
-            document.getElementById('resetPermissions').addEventListener('click', function() {
+            document.getElementById('resetPermissions').addEventListener('click', function () {
                 // Simular un cambio en el rol para restablecer los permisos
                 const event = new Event('change');
                 document.getElementById('userRoles').dispatchEvent(event);
             });
-            
+
             // Manejar botón de guardar permisos
-            document.getElementById('savePermissions').addEventListener('click', function() {
+            document.getElementById('savePermissions').addEventListener('click', function () {
                 alert('Permisos guardados correctamente');
             });
-            
+
             // Manejar botón de guardar preferencias de notificaciones
-            document.getElementById('saveNotificationSettings').addEventListener('click', function() {
+            document.getElementById('saveNotificationSettings').addEventListener('click', function () {
                 showNotification('Preferencias de notificaciones guardadas correctamente', 'success');
             });
-            
+
             // Manejar selector de tema
             document.querySelectorAll('.theme-option').forEach(option => {
-                option.addEventListener('click', function() {
+                option.addEventListener('click', function () {
                     document.querySelectorAll('.theme-option').forEach(opt => opt.classList.remove('selected'));
                     this.classList.add('selected');
-                    
+
                     const theme = this.dataset.theme;
                     applyTheme(theme);
                 });
             });
-            
+
             // Manejar modo oscuro
-            document.getElementById('darkMode').addEventListener('change', function() {
+            document.getElementById('darkMode').addEventListener('change', function () {
                 document.body.classList.toggle('dark-mode', this.checked);
                 showNotification('Modo oscuro ' + (this.checked ? 'activado' : 'desactivado'), 'info');
             });
-            
+
             // Manejar tamaño de fuente
-            document.getElementById('fontSize').addEventListener('change', function() {
+            document.getElementById('fontSize').addEventListener('change', function () {
                 document.body.className = document.body.className.replace(/font-size-\w+/g, '');
                 document.body.classList.add('font-size-' + this.value);
                 showNotification('Tamaño de fuente cambiado a ' + this.value, 'info');
             });
-            
+
             // Manejar configuración de seguridad
-            document.getElementById('passwordPolicy').addEventListener('change', function() {
+            document.getElementById('passwordPolicy').addEventListener('change', function () {
                 const policy = this.value;
                 const securityLevel = document.getElementById('securityLevel');
                 const securityText = document.getElementById('securityText');
-                
+
                 securityLevel.className = 'security-level security-' + policy;
                 securityText.textContent = policy === 'basic' ? 'Bajo' : policy === 'medium' ? 'Medio' : 'Alto';
             });
-            
+
             // Manejar modo de mantenimiento
-            document.getElementById('maintenanceMode').addEventListener('change', function() {
+            document.getElementById('maintenanceMode').addEventListener('change', function () {
                 if (this.checked) {
                     showNotification('⚠️ Modo de mantenimiento activado. Los usuarios no podrán acceder al sistema.', 'warning');
                 } else {
                     showNotification('✅ Modo de mantenimiento desactivado. Sistema disponible.', 'success');
                 }
             });
-            
+
             // Manejar limpiar caché
-            document.getElementById('clearCache').addEventListener('click', function() {
+            document.getElementById('clearCache').addEventListener('click', function () {
                 showNotification('Limpiando caché...', 'info');
                 setTimeout(() => {
                     showNotification('Caché limpiado correctamente', 'success');
                 }, 1500);
             });
-            
+
             // Manejar regenerar API key
-            document.getElementById('regenerateApiKey').addEventListener('click', function() {
+            document.getElementById('regenerateApiKey').addEventListener('click', function () {
                 const apiKey = document.getElementById('apiKey');
                 const newKey = 'sk-' + Math.random().toString(36).substr(2, 16);
                 apiKey.value = newKey;
                 showNotification('Nueva clave de API generada', 'success');
             });
-            
+
             // Simular datos del sistema en tiempo real
             function updateSystemStats() {
                 document.getElementById('cpuUsage').textContent = Math.floor(Math.random() * 30 + 30) + '%';
                 document.getElementById('memoryUsage').textContent = Math.floor(Math.random() * 20 + 50) + '%';
                 document.getElementById('diskUsage').textContent = Math.floor(Math.random() * 10 + 75) + '%';
             }
-            
+
             // Actualizar estadísticas cada 5 segundos
             setInterval(updateSystemStats, 5000);
-            
+
             // Función para aplicar tema
             function applyTheme(theme) {
                 const root = document.documentElement;
-                
-                switch(theme) {
+
+                switch (theme) {
                     case 'green':
                         root.style.setProperty('--primary-color', '#4caf50');
                         root.style.setProperty('--secondary-color', '#388e3c');
@@ -833,25 +935,25 @@
                         root.style.setProperty('--primary-color', '#3D5DEF');
                         root.style.setProperty('--secondary-color', '#395886');
                 }
-                
+
                 showNotification('Tema aplicado correctamente', 'success');
             }
-            
+
             // Función para mostrar notificaciones
             function showNotification(message, type = 'info') {
                 const notification = document.createElement('div');
                 notification.className = `alert alert-${type}`;
                 notification.style.cssText = 'position: fixed; top: 20px; right: 20px; z-index: 1000; min-width: 300px; animation: slideIn 0.3s ease;';
                 notification.innerHTML = `<i class="fas fa-${type === 'success' ? 'check' : type === 'warning' ? 'exclamation-triangle' : 'info-circle'}"></i> ${message}`;
-                
+
                 document.body.appendChild(notification);
-                
+
                 setTimeout(() => {
                     notification.style.animation = 'slideOut 0.3s ease';
                     setTimeout(() => notification.remove(), 300);
                 }, 3000);
             }
-            
+
             // Añadir animaciones CSS
             const style = document.createElement('style');
             style.textContent = `
@@ -870,35 +972,36 @@
                 .dark-mode img, .dark-mode video { filter: invert(1) hue-rotate(180deg); }
             `;
             document.head.appendChild(style);
-            
+
             // Botones de guardar para las nuevas secciones
-            document.getElementById('saveThemeSettings').addEventListener('click', function() {
+            document.getElementById('saveThemeSettings').addEventListener('click', function () {
                 showNotification('Configuración de tema guardada', 'success');
             });
-            
-            document.getElementById('saveSecuritySettings').addEventListener('click', function() {
+
+            document.getElementById('saveSecuritySettings').addEventListener('click', function () {
                 showNotification('Configuración de seguridad guardada', 'success');
             });
-            
-            document.getElementById('saveSystemSettings').addEventListener('click', function() {
+
+            document.getElementById('saveSystemSettings').addEventListener('click', function () {
                 showNotification('Configuración del sistema guardada', 'success');
             });
-            
-            document.getElementById('saveApiSettings').addEventListener('click', function() {
+
+            document.getElementById('saveApiSettings').addEventListener('click', function () {
                 showNotification('Configuración de API guardada', 'success');
             });
-            
+
             // Manejar botón de guardar configuración de copias de seguridad
-            document.getElementById('saveBackupSettings').addEventListener('click', function() {
+            document.getElementById('saveBackupSettings').addEventListener('click', function () {
                 alert('Configuración de copias de seguridad guardada correctamente');
             });
-            
+
             // Manejar botón de guardar todos los cambios
-            document.getElementById('btnSaveAllSettings').addEventListener('click', function() {
+            document.getElementById('btnSaveAllSettings').addEventListener('click', function () {
                 alert('Todos los cambios han sido guardados correctamente');
             });
         });
     </script>
     <script src="../public/js/admin-verification.js"></script>
 </body>
+
 </html>

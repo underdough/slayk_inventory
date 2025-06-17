@@ -51,7 +51,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $_SESSION["rol_usuario"] = $fila["rol"];
                 
                 // Registrar la hora de inicio de sesión
-                $actualizarAcceso = $conexion->prepare("UPDATE `usuarios` SET `ultimo_acceso` = NOW() WHERE `num_doc` = ?");
+                $actualizarAcceso = $conexion->prepare("UPDATE `usuarios` SET `ultimo_conexion` = NOW() WHERE `num_doc` = ?");
                 $actualizarAcceso->bind_param("i", $fila["num_doc"]);
                 $actualizarAcceso->execute();
                 

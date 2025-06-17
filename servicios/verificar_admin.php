@@ -18,13 +18,13 @@ session_start();
  */
 function esAdministrador() {
    // Verificar si las variables de sesión están definidas
-    if (!isset($_SESSION['id_usuarios']) || !isset($_SESSION['rol'])) {
+    if (!isset($_SESSION['id_usuario']) || !isset($_SESSION['rol_usuario'])) {
         return false;
     }
 
     // Obtener el ID del usuario y el rol de la sesión
-    $id_usuarios = $_SESSION['id_usuarios'];
-    $rol = $_SESSION['rol'];
+    $id_usuarios = $_SESSION['id_usuario'];
+    $rol = $_SESSION['rol_usuario'];
 
     // Conectar a la base de datos
     $db = new PDO('mysql:host=localhost;dbname=arco_bdd', 'usuario', 'contraseña');
